@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Fake Weather</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="setting">Setting</string>
+    <string name="home">Home</string>
+    <string name="theme_switch">Theme Switch</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="preference_file_key">preference_file_key</string>
+    <string name="is_dark">is_dark</string>
+</resources>

@@ -10,8 +10,17 @@ import androidx.room.TypeConverters;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {}, version = 2)
+import ir.ben.fakeweather.daos.OpenWeatherMapDao;
+import ir.ben.fakeweather.models.Current;
+import ir.ben.fakeweather.models.Daily;
+import ir.ben.fakeweather.models.OpenWeatherMap;
+import ir.ben.fakeweather.models.Temp;
+import ir.ben.fakeweather.models.Weather;
+
+@Database(entities = {Current.class, Daily.class, OpenWeatherMap.class, Temp.class, Weather.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
+
+    public abstract OpenWeatherMapDao openWeatherMapDao();
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

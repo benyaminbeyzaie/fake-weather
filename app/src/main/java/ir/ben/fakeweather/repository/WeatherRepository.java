@@ -15,7 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WeatherRepository {
-    AppDatabase db;
+    private final AppDatabase db;
     private final MutableLiveData<String> message;
     private final MutableLiveData<OpenWeatherMap> openWeatherMap;
 
@@ -43,8 +43,7 @@ public class WeatherRepository {
 
             @Override
             public void onFailure(Call<OpenWeatherMap> call, Throwable t) {
-                // TODO call refreshOpenWeatherMapData and check time for cache
-
+                // TODO call refreshOpenWeatherMapData and check time for cache,
             }
         });
     }
@@ -52,6 +51,7 @@ public class WeatherRepository {
     private LiveData<OpenWeatherMap> refreshOpenWeatherMapData(double lat, double lon) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             OpenWeatherMap result = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon);
+            // TODO remember to add objects using foreign key
             openWeatherMap.postValue(result);
         });
         return openWeatherMap;

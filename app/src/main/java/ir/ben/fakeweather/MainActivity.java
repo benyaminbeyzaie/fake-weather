@@ -1,47 +1,38 @@
 package ir.ben.fakeweather;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.MenuItem;
+
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import ir.ben.fakeweather.database.AppDatabase;
 import ir.ben.fakeweather.enums.SelectedPage;
 import ir.ben.fakeweather.fragments.Home;
 import ir.ben.fakeweather.fragments.Setting;
-import ir.ben.fakeweather.models.OpenWeatherMap;
 import ir.ben.fakeweather.view_models.UiStateViewModel;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     Setting setting = new Setting();
-    Home home = new Home();
+    AppDatabase db;
+    Home home;
     SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = AppDatabase.getDatabase(getApplication());
+        home = new Home(db);
+
         UiStateViewModel model = new ViewModelProvider(this).get(UiStateViewModel.class);
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 

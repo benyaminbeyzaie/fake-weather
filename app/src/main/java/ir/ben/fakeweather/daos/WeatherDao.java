@@ -1,6 +1,7 @@
 package ir.ben.fakeweather.daos;
 
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
@@ -14,4 +15,10 @@ public interface WeatherDao {
 
     @Query("SELECT * FROM weather WHERE current_fk LIKE :currentFk")
     List<Weather> getAllWeathersForCurrent(int currentFk);
+
+    @Insert
+    void insert(Weather weather);
+
+    @Query("delete from weather")
+    void deleteAll();
 }

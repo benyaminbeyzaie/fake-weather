@@ -3,7 +3,6 @@ package ir.ben.fakeweather.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import javax.annotation.Generated;
@@ -12,17 +11,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(
-        tableName = "weather",
-        foreignKeys = {
-                @ForeignKey(
-                        entity = Current.class,
-                        parentColumns = "id",
-                        childColumns = "current_fk"
-                ), @ForeignKey(
-                entity = Daily.class,
-                parentColumns = "id",
-                childColumns = "daily_fk"
-        )})
+        tableName = "weather")
 @Generated("jsonschema2pojo")
 public class Weather {
     @PrimaryKey(autoGenerate = true)

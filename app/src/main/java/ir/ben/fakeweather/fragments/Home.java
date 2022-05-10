@@ -20,13 +20,19 @@ import android.widget.Toast;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import ir.ben.fakeweather.R;
 import ir.ben.fakeweather.database.AppDatabase;
 import ir.ben.fakeweather.models.CoordResponse;
+import ir.ben.fakeweather.models.Current;
 import ir.ben.fakeweather.models.Daily;
 import ir.ben.fakeweather.models.OpenWeatherMap;
+import ir.ben.fakeweather.models.Temp;
+import ir.ben.fakeweather.models.Weather;
 import ir.ben.fakeweather.network.NetworkService;
 import ir.ben.fakeweather.utils.WeatherAdaptor;
 import retrofit2.Call;
@@ -42,6 +48,7 @@ public class Home extends Fragment {
     WeatherAdaptor weatherAdaptor;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
+    List<Daily> dailyList = new ArrayList<>();
 
     private final String LAT = "lat";
     private final String LON = "lon";
@@ -80,14 +87,26 @@ public class Home extends Fragment {
 
         saveCityName(cityName);
 
-        updateLastData(null);
-//        if (isNetworkAvailable(getContext()))
-//            getWeatherDataByCityName(cityName);
-//        else
-//            Toast.makeText(getContext(),
-//                    "Check internet connection",
-//                    Toast.LENGTH_LONG).show();
+        if (isNetworkAvailable(getContext()))
+            getWeatherDataByCityName(cityName);
+        else {
+            Toast.makeText(getContext(),
+                    "Check internet connection",
+                    Toast.LENGTH_LONG).show();
+            updateFromCache();
+
+        }
         return view;
+    }
+
+    private void updateFromCache() {
+        if (getLon() != null){
+            try {
+                setWeatherDataByLatLon(getLat(), getLon());
+            } catch (InterruptedException e) {
+
+            }
+        }
     }
 
     public void saveCityName(String city) {
@@ -133,7 +152,7 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<OpenWeatherMap> call, Throwable t) {
-                // TODO call refreshOpenWeatherMapData and check time for cache,
+                updateFromCache();
             }
         });
     }
@@ -142,17 +161,81 @@ public class Home extends Fragment {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                db.weatherDao().deleteAll();
+                db.tempDao().deleteAll();
+                db.dailyDao().deleteAll();
+                db.current().deleteAll();
                 db.openWeatherMapDao().deleteAll();
+
+                weather.setId(randomIdGen());
                 db.openWeatherMapDao().insert(weather);
 
 
-                OpenWeatherMap openWeather = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(getLat(), getLon());
-                System.out.println("hello");
+                for (Daily daily : weather.getDaily()) {
+                    daily.setOpenWeatherMapFk(weather.getId());
+                    daily.setId(randomIdGen());
+                    db.dailyDao().insert(daily);
+
+                    daily.getTemp().setDailyFk(daily.getId());
+                    db.tempDao().insert(daily.getTemp());
+
+                    for (Weather weather1 : daily.getWeather()) {
+                        weather1.setDailyFk(daily.getId());
+                        weather1.setId(randomIdGen());
+                        db.weatherDao().insert(weather1);
+                    }
+                }
+
+                weather.getCurrent().setId(randomIdGen());
+                weather.getCurrent().setOpenWeatherMapFk(weather.getId());
+                db.current().insert(weather.getCurrent());
+
+                for (Weather weather1 : weather.getCurrent().getWeather()) {
+                    weather1.setCurrentFk(weather.getCurrent().getId());
+                    weather1.setId(randomIdGen());
+                    db.weatherDao().insert(weather1);
+                }
+
             }
         });
 
     }
 
+    public void setWeatherDataByLatLon(Double lat, Double lon) throws InterruptedException {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                OpenWeatherMap openWeather = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon);
+                openWeather.setCurrent(db.current().getAllCurrentsWithFk(openWeather.getId()).get(0));
+                List<Daily> dailies = new ArrayList<>();
+
+                for (Daily daily : db.dailyDao().getAllDailyForOpenWeatherMap(openWeather.getId())) {
+                    List<Temp> temps = db.tempDao().getAllTempsForDaily(daily.getId());
+                    daily.setTemp(temps.get(0));
+
+
+                    List<Weather> allWeathersForDaily = db.weatherDao().getAllWeathersForDaily(daily.getId());
+                    daily.setWeather(allWeathersForDaily);
+
+                    dailies.add(daily);
+                }
+                openWeather.setDaily(dailies);
+                Current current = db.current().getAllCurrentsWithFk(openWeather.getId()).get(0);
+                List<Weather> allWeathersForDaily = db.weatherDao().getAllWeathersForCurrent(current.getId());
+                current.setWeather(allWeathersForDaily);
+                openWeather.setCurrent(current);
+                dailyList = dailies;
+            }
+        });
+
+        Thread.sleep(15000);
+        weatherAdaptor.setDailies(dailyList);
+
+    }
+
+    public int randomIdGen(){
+        return ThreadLocalRandom.current().nextInt(20, 1000) + 5 + new Random().nextInt(30);
+    }
 
     public void getWeatherDataByCityName(String cityName){
         NetworkService.getInstance().getMyApi().getWeatherByCityName(cityName).enqueue(new Callback<CoordResponse>() {

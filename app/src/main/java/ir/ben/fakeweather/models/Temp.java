@@ -12,7 +12,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(
-        tableName = "temp",
+        tableName = "tempDB",
         foreignKeys = {
                 @ForeignKey(
                         entity = Daily.class,

@@ -12,9 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,12 +47,15 @@ import retrofit2.Response;
 public class Home extends Fragment {
 
 
-    TextView currentTime, currentHumidity, currentMaxtemp, currentMintemp, currentWind, currentPressure;
+    EditText cityName, latEdit, lonEdit;
+    Button searchButton;
+    RadioGroup radio;
     RecyclerView recyclerView;
     WeatherAdaptor weatherAdaptor;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     List<Daily> dailyList = new ArrayList<>();
+    boolean isByCity = true;
 
     private final String LAT = "lat";
     private final String LON = "lon";
@@ -65,26 +72,86 @@ public class Home extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         sharedPref = getContext().getSharedPreferences("Weather", MODE_PRIVATE);
         editor = sharedPref.edit();
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
-        currentTime = view.findViewById(R.id.time_id_current);
-        currentHumidity = view.findViewById(R.id.humidity_id_current);
-        currentMaxtemp = view.findViewById(R.id.maxtemp_id_current);
-        currentMintemp = view.findViewById(R.id.mintemp_id_current);
-        currentWind = view.findViewById(R.id.wind_id_current);
-        currentPressure = view.findViewById(R.id.pressure_id_current);
+        radio = (RadioGroup) view.findViewById(R.id.radio_button);
+
+        cityName = view.findViewById(R.id.city_name);
+        latEdit = view.findViewById(R.id.lat);
+        lonEdit = view.findViewById(R.id.lon);
+
+        searchButton = view.findViewById(R.id.search_button);
+
+        radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                View radioButton = radio.findViewById(checkedId);
+                int index = radio.indexOfChild(radioButton);
+
+                switch (index) {
+                    case 0:
+                        cityName.setVisibility(View.VISIBLE);
+                        searchButton.setVisibility(View.VISIBLE);
+                        latEdit.setVisibility(View.INVISIBLE);
+                        lonEdit.setVisibility(View.INVISIBLE);
+                        isByCity = true;
+                        break;
+                    case 1: // secondbutton
+
+                        latEdit.setVisibility(View.VISIBLE);
+                        lonEdit.setVisibility(View.VISIBLE);
+                        searchButton.setVisibility(View.VISIBLE);
+                        cityName.setVisibility(View.INVISIBLE);
+                        isByCity = false;
+                        break;
+                }
+            }
+        });
 
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager( getContext()));
         weatherAdaptor = new WeatherAdaptor();
         recyclerView.setAdapter(weatherAdaptor);
 
+        searchButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (isByCity){
+                    String inputCity = cityName.getText().toString();
+                    if (inputCity.isEmpty()){
+                        Toast.makeText(getContext(),
+                                "Invalid City Name",
+                                Toast.LENGTH_LONG).show();
+                    }else{
+                        getDataByCityName(inputCity);
+                    }
+                }else {
+                    String latStr = latEdit.getText().toString();
+                    String lonStr = lonEdit.getText().toString();
+                    if (latStr.isEmpty() || lonStr.isEmpty()){
+                        Toast.makeText(getContext(),
+                                "Invalid Lat or Lon",
+                                Toast.LENGTH_LONG).show();
+                    }else
+                        getDataByLocation(Double.parseDouble(latStr), Double.parseDouble(lonStr));
 
-        String cityName = "cairo";
+                }
+            }
+        });
 
+
+
+        return view;
+    }
+
+    private void getDataByCityName(String cityName) {
         saveCityName(cityName);
 
         if (isNetworkAvailable(getContext()))
@@ -96,7 +163,18 @@ public class Home extends Fragment {
             updateFromCache();
 
         }
-        return view;
+    }
+
+    private void getDataByLocation(Double lat, Double lon) {
+        saveLatLong(lat, lon);
+        if (isNetworkAvailable(getContext()))
+            getWeatherDataByLocation(lat, lon);
+        else {
+            Toast.makeText(getContext(),
+                    "Check internet connection",
+                    Toast.LENGTH_LONG).show();
+            updateFromCache();
+        }
     }
 
     private void updateFromCache() {

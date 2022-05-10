@@ -8,6 +8,7 @@ import ir.ben.fakeweather.enums.SelectedPage;
 
 public class UiStateViewModel extends ViewModel {
     private MutableLiveData<SelectedPage> selectedPageMutableLiveData;
+    private MutableLiveData<SelectedPage> lastSelectedPageMutableLiveData;
 
     public LiveData<SelectedPage> getSelectedPage() {
         if (selectedPageMutableLiveData == null) {
@@ -19,6 +20,18 @@ public class UiStateViewModel extends ViewModel {
     public void changePage(SelectedPage selectedPage) {
         selectedPageMutableLiveData.postValue(selectedPage);
     }
+
+    public void changeLastPage(SelectedPage selectedPage){
+        lastSelectedPageMutableLiveData.postValue(selectedPage);
+    }
+
+    public LiveData<SelectedPage> getLastSelectedPage(){
+        if (lastSelectedPageMutableLiveData == null) {
+            lastSelectedPageMutableLiveData = new MutableLiveData<>();
+        }
+        return lastSelectedPageMutableLiveData;
+    }
+
 }
 
 

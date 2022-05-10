@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
@@ -26,6 +27,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import ir.ben.fakeweather.enums.SelectedPage;
 import ir.ben.fakeweather.fragments.Home;
 import ir.ben.fakeweather.fragments.Setting;
+import ir.ben.fakeweather.fragments.ShowWeather;
+import ir.ben.fakeweather.models.Daily;
 import ir.ben.fakeweather.models.OpenWeatherMap;
 import ir.ben.fakeweather.view_models.UiStateViewModel;
 import retrofit2.Call;
@@ -38,11 +41,14 @@ public class MainActivity extends AppCompatActivity {
     Setting setting = new Setting();
     Home home = new Home();
     SharedPreferences sharedpreferences;
+    Fragment last;
+    //    int counter = 0;
+    UiStateViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UiStateViewModel model = new ViewModelProvider(this).get(UiStateViewModel.class);
+        model = new ViewModelProvider(this).get(UiStateViewModel.class);
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         boolean isDark = sharedpreferences.getBoolean(getString(R.string.is_dark), false);
@@ -70,16 +76,45 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Main", "Set the select listener");
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            Log.d("Main", "Clicked on item");
+//            Log.d("Main", "Clicked on item");
             System.out.println(item.getItemId());
             switch (item.getItemId()) {
                 case R.id.setting:
-                    model.changePage(SelectedPage.setting);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, setting).commit();
+                    if (model.getSelectedPage().getValue() == null || !model.getSelectedPage().getValue().equals(SelectedPage.setting)) {
+                        model.changePage(SelectedPage.setting);
+                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.setCustomAnimations(
+                                R.anim.slide_in,  // enter
+                                R.anim.fade_out,  // exit
+                                R.anim.fade_in,   // popEnter
+                                R.anim.slide_out  // popExit
+                        );
+                        fragmentTransaction.replace(R.id.container, setting);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                        Log.d("Main", "Clicked on setting");
+                    }
+
+//                    getSupportFragmentManager().beginTransaction()
+//                            .setCustomAnimations(
+//                                    R.anim.slide_in,  // enter
+//                                    R.anim.fade_out,  // exit
+//                                    R.anim.fade_in,   // popEnter
+//                                    R.anim.slide_out  // popExit
+//                            ).replace(R.id.container, setting).addToBackStack(null).commit();
                     return true;
                 case R.id.home:
+                    if (model.getSelectedPage().getValue() != null && !model.getSelectedPage().getValue().equals(SelectedPage.home)) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
+//                        onBackPressed();
+                        Log.d("Main", "Clicked on home");
+                    }
+//                    if (model.getLastSelectedPage() !=null && model.getSelectedPage().getValue().equals(SelectedPage.show_weather))
+//                        model.changePage(SelectedPage.show_weather);
+//                    else
+//                        model.changePage(SelectedPage.home);
                     model.changePage(SelectedPage.home);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
                     return true;
             }
             return false;
@@ -87,4 +122,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public void showMore(Daily daily, String time) {
+        model.changePage(SelectedPage.show_weather);
+        ShowWeather showWeather = new ShowWeather(daily, time);
+        getSupportFragmentManager().beginTransaction().
+                setCustomAnimations(
+                        R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                ).
+                replace(R.id.container, showWeather).
+                addToBackStack(null).
+                commit();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        if(model.getSelectedPage().getValue()!=null && model.getSelectedPage().getValue().equals(SelectedPage.show_weather)){
+//            getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
+            model.changePage(SelectedPage.home);
+            super.onBackPressed();
+//            getSupportFragmentManager().popBackStack();
+        }else if (model.getSelectedPage().getValue()!=null && model.getSelectedPage().getValue().equals(SelectedPage.setting)){
+            model.changePage(SelectedPage.home);
+            super.onBackPressed();
+        }else {
+            super.onBackPressed();
+        }
+    }
 }

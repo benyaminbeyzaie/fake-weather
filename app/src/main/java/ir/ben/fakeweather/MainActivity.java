@@ -28,6 +28,7 @@ import ir.ben.fakeweather.fragments.Home;
 import ir.ben.fakeweather.fragments.Setting;
 import ir.ben.fakeweather.models.OpenWeatherMap;
 import ir.ben.fakeweather.view_models.UiStateViewModel;
+import ir.ben.fakeweather.view_models.WeatherViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +43,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UiStateViewModel model = new ViewModelProvider(this).get(UiStateViewModel.class);
+        UiStateViewModel uiStateViewModel = new ViewModelProvider(this).get(UiStateViewModel.class);
+        WeatherViewModel weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+
+        weatherViewModel.refresh(51.5072, 0.1276);
+
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         boolean isDark = sharedpreferences.getBoolean(getString(R.string.is_dark), false);
@@ -61,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.home);
 
 
-        if (model.getSelectedPage().getValue() == null || model.getSelectedPage().getValue() == SelectedPage.home) {
+        if (uiStateViewModel.getSelectedPage().getValue() == null || uiStateViewModel.getSelectedPage().getValue() == SelectedPage.home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, setting).commit();
@@ -74,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(item.getItemId());
             switch (item.getItemId()) {
                 case R.id.setting:
-                    model.changePage(SelectedPage.setting);
+                    uiStateViewModel.changePage(SelectedPage.setting);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, setting).commit();
                     return true;
                 case R.id.home:
-                    model.changePage(SelectedPage.home);
+                    uiStateViewModel.changePage(SelectedPage.home);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
                     return true;
             }

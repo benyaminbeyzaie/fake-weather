@@ -14,24 +14,17 @@ import com.google.gson.annotations.SerializedName;
 @Entity(
         tableName = "weather",
         foreignKeys = {
-                @ForeignKey(
-                        entity = Current.class,
-                        parentColumns = "id",
-                        childColumns = "current_fk"
-                ), @ForeignKey(
+                 @ForeignKey(
                 entity = Daily.class,
                 parentColumns = "id",
-                childColumns = "daily_fk"
+                childColumns = "fk"
         )})
 @Generated("jsonschema2pojo")
 public class Weather {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id = 0;
 
-    @ColumnInfo(name = "current_fk")
-    private int currentFk;
-
-    @ColumnInfo(name = "daily_fk")
+    @ColumnInfo(name = "fk")
     private int dailyFk;
 
     @ColumnInfo(name = "main")
@@ -49,14 +42,6 @@ public class Weather {
     @Expose
     private String icon;
 
-    public int getCurrentFk() {
-        return currentFk;
-    }
-
-    public void setCurrentFk(int currentFk) {
-        this.currentFk = currentFk;
-    }
-
     public int getDailyFk() {
         return dailyFk;
     }
@@ -65,11 +50,11 @@ public class Weather {
         this.dailyFk = dailyFk;
     }
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -97,4 +82,14 @@ public class Weather {
         this.icon = icon;
     }
 
+    @Override
+    public String toString() {
+        return "Weather{" +
+                "id=" + id +
+                ", dailyFk=" + dailyFk +
+                ", main='" + main + '\'' +
+                ", description='" + description + '\'' +
+                ", icon='" + icon + '\'' +
+                '}';
+    }
 }

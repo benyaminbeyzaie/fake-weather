@@ -1,6 +1,7 @@
 package ir.ben.fakeweather.view_models;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -21,6 +22,7 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     public void refresh(double lat, double lon) {
+        Log.d("Repo", "refresh called");
         repository.refreshOpenWeatherMapDataWithNetwork(lat, lon);
     }
 }

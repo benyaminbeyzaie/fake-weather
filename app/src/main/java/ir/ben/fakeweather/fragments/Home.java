@@ -32,7 +32,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import ir.ben.fakeweather.R;
 import ir.ben.fakeweather.database.AppDatabase;
 import ir.ben.fakeweather.models.CoordResponse;
-import ir.ben.fakeweather.models.Current;
 import ir.ben.fakeweather.models.Daily;
 import ir.ben.fakeweather.models.OpenWeatherMap;
 import ir.ben.fakeweather.models.Temp;

@@ -28,6 +28,7 @@ import ir.ben.fakeweather.fragments.Home;
 import ir.ben.fakeweather.fragments.Setting;
 import ir.ben.fakeweather.models.OpenWeatherMap;
 import ir.ben.fakeweather.view_models.UiStateViewModel;
+import ir.ben.fakeweather.view_models.WeatherViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

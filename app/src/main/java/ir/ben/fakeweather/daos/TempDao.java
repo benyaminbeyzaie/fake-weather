@@ -12,10 +12,10 @@ import ir.ben.fakeweather.models.Weather;
 
 @Dao
 public interface TempDao {
-    @Query("SELECT * FROM `temp` WHERE daily_fk LIKE :dailyFk")
+    @Query("SELECT * FROM tempDB WHERE daily_fk LIKE :dailyFk")
     Temp getTemp(int dailyFk);
 
-    @Query("DELETE FROM `temp` WHERE daily_fk LIKE :fk")
+    @Query("DELETE FROM tempDB WHERE daily_fk LIKE :fk")
     void delete(int fk);
 
     @Insert

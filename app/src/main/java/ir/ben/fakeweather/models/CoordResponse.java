@@ -2,6 +2,7 @@ package ir.ben.fakeweather.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,6 +12,9 @@ import javax.annotation.Generated;
 @Entity(tableName = "coord_response")
 @Generated("jsonschema2pojo")
 public class CoordResponse {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @ColumnInfo(name = "cityName")
     private String cityName;
 
@@ -46,5 +50,13 @@ public class CoordResponse {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

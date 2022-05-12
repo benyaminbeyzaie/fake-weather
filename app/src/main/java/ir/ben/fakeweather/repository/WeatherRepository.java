@@ -1,6 +1,7 @@
 package ir.ben.fakeweather.repository;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -8,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import ir.ben.fakeweather.database.AppDatabase;
+import ir.ben.fakeweather.models.CoordResponse;
 import ir.ben.fakeweather.models.Daily;
 import ir.ben.fakeweather.models.OpenWeatherMap;
 import ir.ben.fakeweather.models.Weather;

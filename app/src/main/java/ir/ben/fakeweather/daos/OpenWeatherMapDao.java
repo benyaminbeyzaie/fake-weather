@@ -20,4 +20,7 @@ public interface OpenWeatherMapDao {
 
     @Delete
     void delete(OpenWeatherMap openWeatherMap);
+
+    @Query("delete from open_weather_map")
+    void deleteAll();
 }

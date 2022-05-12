@@ -6,153 +6,221 @@
     android:layout_height="match_parent"
     tools:context=".fragments.Home">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        style="@style/Theme.FakeWeather"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="7dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp">
-
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="34dp"
-                android:layout_marginBottom="41dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_launcher_background" />
-
-            <LinearLayout
-                android:layout_width="294dp"
-                android:layout_height="149dp"
-                android:layout_marginStart="13dp"
-                android:layout_marginBottom="1dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/time_string" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/humidity" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/max_temp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/min_temp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/pressure" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/wind_speed" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/time_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/default_value" />
-
-                    <TextView
-                        android:id="@+id/humidity_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/default_value" />
-
-                    <TextView
-                        android:id="@+id/maxtemp_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/default_value" />
-
-                    <TextView
-                        android:id="@+id/mintemp_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/default_value" />
-
-                    <TextView
-                        android:id="@+id/pressure_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/default_value" />
-
-                    <TextView
-                        android:id="@+id/wind_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/default_value" />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/home" />
+        android:orientation="vertical">
 
+        <LinearLayout
+            style="@style/Theme.FakeWeather"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#DFC9C9"
+            android:orientation="vertical">
+
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_button"
+                android:orientation="vertical">
+
+                <RadioButton android:id="@+id/radio_pirates"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30px"
+                    android:text="Search by city name"
+                    />
+                <RadioButton android:id="@+id/radio_ninjas"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="30px"
+                    android:layout_height="wrap_content"
+                    android:text="Search by location"/>
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/city_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:hint="City Name"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/lat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:hint="LAT"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/lon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:hint="LON"
+                android:inputType="numberDecimal" />
+
+            <Button
+                android:id="@+id/search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:layout_centerHorizontal="true"
+                android:text="Search"
+                android:visibility="invisible"
+                android:layout_gravity="center"
+                />
+
+
+        </LinearLayout>
+
+        <!--        <androidx.cardview.widget.CardView-->
+        <!--            android:id="@+id/cardView_current"-->
+        <!--            style="@style/Theme.FakeWeather2"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="7dp"-->
+        <!--            app:cardCornerRadius="20dp"-->
+        <!--            app:cardElevation="20dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="150dp">-->
+
+
+        <!--                <ImageView-->
+        <!--                    android:id="@+id/imageView_current"-->
+        <!--                    android:layout_width="75dp"-->
+        <!--                    android:layout_height="75dp"-->
+        <!--                    android:layout_marginStart="16dp"-->
+        <!--                    android:layout_marginTop="34dp"-->
+        <!--                    android:layout_marginBottom="41dp"-->
+        <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                    app:layout_constraintStart_toStartOf="parent"-->
+        <!--                    app:layout_constraintTop_toTopOf="parent"-->
+        <!--                    app:srcCompat="@drawable/ic_launcher_background" />-->
+
+        <!--                <LinearLayout-->
+        <!--                    android:layout_width="294dp"-->
+        <!--                    android:layout_height="149dp"-->
+        <!--                    android:layout_marginStart="13dp"-->
+        <!--                    android:layout_marginBottom="1dp"-->
+        <!--                    android:gravity="center_vertical"-->
+        <!--                    android:orientation="horizontal"-->
+        <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                    app:layout_constraintStart_toEndOf="@+id/imageView_current"-->
+        <!--                    app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--                    <LinearLayout-->
+        <!--                        android:layout_width="wrap_content"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_marginStart="25dp"-->
+        <!--                        android:orientation="vertical">-->
+
+        <!--                        <TextView-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:text="@string/time_string" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/humidity" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/max_temp" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/min_temp" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/pressure" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/wind_speed" />-->
+
+        <!--                    </LinearLayout>-->
+
+        <!--                    <LinearLayout-->
+        <!--                        android:layout_width="wrap_content"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_marginStart="10dp"-->
+        <!--                        android:orientation="vertical">-->
+
+        <!--                        <TextView-->
+        <!--                            android:id="@+id/time_id_current"-->
+        <!--                            android:layout_width="match_parent"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:text="@string/default_value" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:id="@+id/humidity_id_current"-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/default_value" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:id="@+id/maxtemp_id_current"-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/default_value" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:id="@+id/mintemp_id_current"-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/default_value" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:id="@+id/pressure_id_current"-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/default_value" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:id="@+id/wind_id_current"-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_marginTop="5dp"-->
+        <!--                            android:text="@string/default_value" />-->
+
+
+        <!--                    </LinearLayout>-->
+
+
+        <!--                </LinearLayout>-->
+
+
+        <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+        <!--        </androidx.cardview.widget.CardView>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/weather_design" />
+    </LinearLayout>
 </FrameLayout>

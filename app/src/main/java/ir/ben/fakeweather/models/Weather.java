@@ -42,6 +42,14 @@ public class Weather {
     @Expose
     private String icon;
 
+    public int getCurrentFk() {
+        return currentFk;
+    }
+
+    public void setCurrentFk(int currentFk) {
+        this.currentFk = currentFk;
+    }
+
     public int getDailyFk() {
         return dailyFk;
     }
@@ -50,11 +58,11 @@ public class Weather {
         this.dailyFk = dailyFk;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

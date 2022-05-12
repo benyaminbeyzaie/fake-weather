@@ -1,7 +1,6 @@
 package ir.ben.fakeweather.repository;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -28,6 +27,39 @@ public class WeatherRepository {
         openWeatherMap = new MutableLiveData<>();
     }
 
+    public void refreshWeatherDataByCityName(String cityName) {
+        NetworkService.getInstance().getMyApi().getWeatherByCityName(cityName).enqueue(new Callback<CoordResponse>() {
+            @Override
+            public void onResponse(Call<CoordResponse> call, Response<CoordResponse> response) {
+                if (response.isSuccessful()) {
+                    Double lat = response.body().getLat();
+                    Double lon = response.body().getLon();
+                    CoordResponse coordResponse = new CoordResponse();
+                    coordResponse.setLat(lat);
+                    coordResponse.setLon(lon);
+                    coordResponse.setCityName(cityName);
+                    AppDatabase.databaseWriteExecutor.execute(() -> {
+                        if (db.coordResponseDao().getByCityName(cityName).size() > 0) {
+                            db.coordResponseDao().deleteWithCityName(cityName);
+                        }
+                        db.coordResponseDao().insert(response.body());
+                    });
+                    refreshOpenWeatherMapDataWithNetwork(coordResponse.getLat(), coordResponse.getLon());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CoordResponse> call, Throwable t) {
+                AppDatabase.databaseWriteExecutor.execute(() -> {
+                    if (db.coordResponseDao().getByCityName(cityName).size() > 0) {
+                        CoordResponse cache = db.coordResponseDao().getByCityName(cityName).get(0);
+                        refreshOpenWeatherMapDataWithNetwork(cache.getLat(), cache.getLon());
+                    }
+                });
+            }
+        });
+    }
+
     public void refreshOpenWeatherMapDataWithNetwork(double lat, double lon) {
         NetworkService.getInstance().getMyApi().getWeather(lat, lon).enqueue(new Callback<OpenWeatherMap>() {
             @Override
@@ -49,9 +81,6 @@ public class WeatherRepository {
                             db.dailyDao().delete(lastCache.getId());
                             db.openWeatherMapDao().delete(lastCache);
                         }
-
-                        Log.d("API", response.body().toString());
-
                         db.openWeatherMapDao().insert(response.body());
                         int id = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon).getId();
                         Log.d("API", "id after insert: " + id);
@@ -82,16 +111,13 @@ public class WeatherRepository {
                             }
                         }
                     });
-                    //refreshOpenWeatherMapData(lat, lon);
+                    refreshOpenWeatherMapData(lat, lon);
                 }
             }
 
             @Override
             public void onFailure(Call<OpenWeatherMap> call, Throwable t) {
                 // TODO call refreshOpenWeatherMapData and check time for cache,
-
-                Log.d("Repo", "onFailure: " + t.getMessage());
-                message.postValue("Error");
             }
         });
     }

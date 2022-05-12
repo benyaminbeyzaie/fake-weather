@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     Setting setting = new Setting();
-    AppDatabase db;
     Home home;
     SharedPreferences sharedpreferences;
 
@@ -30,8 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        db = AppDatabase.getDatabase(getApplication());
-        home = new Home(db);
+        home = new Home();
 
         UiStateViewModel model = new ViewModelProvider(this).get(UiStateViewModel.class);
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

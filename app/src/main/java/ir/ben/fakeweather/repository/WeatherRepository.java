@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import ir.ben.fakeweather.database.AppDatabase;
+import ir.ben.fakeweather.models.CoordResponse;
 import ir.ben.fakeweather.models.OpenWeatherMap;
 import ir.ben.fakeweather.network.NetworkService;
 import retrofit2.Call;
@@ -23,6 +24,39 @@ public class WeatherRepository {
         db = AppDatabase.getDatabase(application);
         message = new MutableLiveData<>();
         openWeatherMap = new MutableLiveData<>();
+    }
+
+    public void refreshWeatherDataByCityName(String cityName) {
+        NetworkService.getInstance().getMyApi().getWeatherByCityName(cityName).enqueue(new Callback<CoordResponse>() {
+            @Override
+            public void onResponse(Call<CoordResponse> call, Response<CoordResponse> response) {
+                if (response.isSuccessful()) {
+                    Double lat = response.body().getLat();
+                    Double lon = response.body().getLon();
+                    CoordResponse coordResponse = new CoordResponse();
+                    coordResponse.setLat(lat);
+                    coordResponse.setLon(lon);
+                    coordResponse.setCityName(cityName);
+                    AppDatabase.databaseWriteExecutor.execute(() -> {
+                        if (db.coordResponseDao().getByCityName(cityName).size() > 0) {
+                            db.coordResponseDao().deleteWithCityName(cityName);
+                        }
+                        db.coordResponseDao().insert(response.body());
+                    });
+                    refreshOpenWeatherMapDataWithNetwork(coordResponse.getLat(), coordResponse.getLon());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CoordResponse> call, Throwable t) {
+                AppDatabase.databaseWriteExecutor.execute(() -> {
+                    if (db.coordResponseDao().getByCityName(cityName).size() > 0) {
+                        CoordResponse cache = db.coordResponseDao().getByCityName(cityName).get(0);
+                        refreshOpenWeatherMapDataWithNetwork(cache.getLat(), cache.getLon());
+                    }
+                });
+            }
+        });
     }
 
     public void refreshOpenWeatherMapDataWithNetwork(double lat, double lon) {

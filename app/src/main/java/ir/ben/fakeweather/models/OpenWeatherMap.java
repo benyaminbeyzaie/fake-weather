@@ -11,6 +11,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "open_weather_map")
@@ -42,7 +43,7 @@ public class OpenWeatherMap {
     @Ignore
     @SerializedName("current")
     @Expose
-    private Current current;
+    private Daily current;
 
     @Ignore
     @SerializedName("daily")
@@ -89,11 +90,11 @@ public class OpenWeatherMap {
         this.timezoneOffset = timezoneOffset;
     }
 
-    public Current getCurrent() {
+    public Daily getCurrent() {
         return current;
     }
 
-    public void setCurrent(Current current) {
+    public void setCurrent(Daily current) {
         this.current = current;
     }
 
@@ -105,4 +106,16 @@ public class OpenWeatherMap {
         this.daily = daily;
     }
 
+    @Override
+    public String toString() {
+        return "OpenWeatherMap{" +
+                "id=" + id +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", timezone='" + timezone + '\'' +
+                ", timezoneOffset=" + timezoneOffset +
+                ", current=" + current +
+                ", daily=" + daily +
+                '}';
+    }
 }

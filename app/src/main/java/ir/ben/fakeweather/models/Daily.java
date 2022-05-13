@@ -1,17 +1,25 @@
 
 package ir.ben.fakeweather.models;
 
+import android.util.Log;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.annotation.Generated;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(
@@ -35,9 +43,10 @@ public class Daily {
     @Expose
     private Integer dt;
 
-    @Ignore
+    @ColumnInfo(name = "temp")
+    @JsonAdapter(TempDes.class)
     @SerializedName("temp")
-    @Expose
+    @Ignore
     private Temp temp;
 
     @ColumnInfo(name = "pressure")
@@ -89,14 +98,6 @@ public class Daily {
         this.dt = dt;
     }
 
-    public Temp getTemp() {
-        return temp;
-    }
-
-    public void setTemp(Temp temp) {
-        this.temp = temp;
-    }
-
     public Integer getPressure() {
         return pressure;
     }
@@ -137,4 +138,55 @@ public class Daily {
         this.weather = weather;
     }
 
+    public Temp getTemp() {
+        return temp;
+    }
+
+    public void setTemp(Temp temp) {
+        this.temp = temp;
+    }
+
+    @Override
+    public String toString() {
+        return "Daily{" +
+                "id=" + id +
+                ", openWeatherMapFk=" + openWeatherMapFk +
+                ", dt=" + dt +
+                ", pressure=" + pressure +
+                ", humidity=" + humidity +
+                ", windSpeed=" + windSpeed +
+                ", windDeg=" + windDeg +
+                ", weather=" + weather +
+                '}';
+    }
+    public static class TempDes implements JsonDeserializer<Temp> {
+        @Override
+        public Temp deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+            Log.d("Repo", "min json: " + json.toString());
+            if (json.isJsonObject()) {
+                Temp temp = new Temp();
+                temp.setMax(json.getAsJsonObject().get("max").getAsDouble());
+                temp.setMin(json.getAsJsonObject().get("min").getAsDouble());
+                return temp;
+            } else {
+                Temp temp = new Temp();
+                temp.setMax(json.getAsDouble());
+                temp.setMin(json.getAsDouble());
+                return temp;
+            }
+        }
+    }
+
+    public static class MaxDes implements JsonDeserializer<Double> {
+        @Override
+        public Double deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            Log.d("Repo", "max: " + json.toString());
+            if (json.isJsonObject()) {
+                return json.getAsJsonObject().get("max").getAsDouble();
+            }
+            return json.getAsDouble();
+        }
+    }
 }
+
+

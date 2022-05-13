@@ -42,11 +42,12 @@ public class MainActivity extends AppCompatActivity {
     Setting setting = new Setting();
     Home home = new Home();
     SharedPreferences sharedpreferences;
+    UiStateViewModel uiStateViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UiStateViewModel uiStateViewModel = new ViewModelProvider(this).get(UiStateViewModel.class);
+        uiStateViewModel = new ViewModelProvider(this).get(UiStateViewModel.class);
         WeatherViewModel weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
         weatherViewModel.refresh(51.5072, 0.1276);
@@ -84,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.setting:
                     uiStateViewModel.changePage(SelectedPage.setting);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, setting).commit();
-                    if (model.getSelectedPage().getValue() == null || !model.getSelectedPage().getValue().equals(SelectedPage.setting)) {
-                        model.changePage(SelectedPage.setting);
+                    if (uiStateViewModel.getSelectedPage().getValue() == null || !uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.setting)) {
+                        uiStateViewModel.changePage(SelectedPage.setting);
                         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.setCustomAnimations(
                                 R.anim.slide_in,  // enter
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.home:
                     uiStateViewModel.changePage(SelectedPage.home);
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
-                    if (model.getSelectedPage().getValue() != null && !model.getSelectedPage().getValue().equals(SelectedPage.home)) {
+                    if (uiStateViewModel.getSelectedPage().getValue() != null && !uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.home)) {
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
 //                        onBackPressed();
                         Log.d("Main", "Clicked on home");
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 //                        model.changePage(SelectedPage.show_weather);
 //                    else
 //                        model.changePage(SelectedPage.home);
-                    model.changePage(SelectedPage.home);
+                    uiStateViewModel.changePage(SelectedPage.home);
 //                    getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
                     return true;
             }
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showMore(Daily daily, String time) {
-        model.changePage(SelectedPage.show_weather);
+        uiStateViewModel.changePage(SelectedPage.show_weather);
         ShowWeather showWeather = new ShowWeather(daily, time);
         getSupportFragmentManager().beginTransaction().
                 setCustomAnimations(
@@ -148,13 +149,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(model.getSelectedPage().getValue()!=null && model.getSelectedPage().getValue().equals(SelectedPage.show_weather)){
+        if(uiStateViewModel.getSelectedPage().getValue()!=null && uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.show_weather)){
 //            getSupportFragmentManager().beginTransaction().replace(R.id.container, home).commit();
-            model.changePage(SelectedPage.home);
+            uiStateViewModel.changePage(SelectedPage.home);
             super.onBackPressed();
 //            getSupportFragmentManager().popBackStack();
-        }else if (model.getSelectedPage().getValue()!=null && model.getSelectedPage().getValue().equals(SelectedPage.setting)){
-            model.changePage(SelectedPage.home);
+        }else if (uiStateViewModel.getSelectedPage().getValue()!=null && uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.setting)){
+            uiStateViewModel.changePage(SelectedPage.home);
             super.onBackPressed();
         }else {
             super.onBackPressed();

@@ -50,6 +50,9 @@ public class OpenWeatherMap {
     @Expose
     private List<Daily> daily = null;
 
+
+    public long saved_at = 0;
+
     public int getId() {
         return id;
     }

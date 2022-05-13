@@ -45,15 +45,15 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
         Daily current = dailies.get(position);
         holder.time.setText(map.get(position));
         holder.humidity.setText(current.getHumidity()+"");
-        holder.maxtemp.setText(current.getTemp().getMax() +"");
-        holder.mintemp.setText(current.getTemp().getMin()+"");
+//        holder.maxtemp.setText(current.getTemp().getMax() +"");
+//        holder.mintemp.setText(current.getTemp().getMin()+"");
         holder.wind.setText(current.getWindSpeed()+"");
+        holder.windDeg.setText(current.getWindDeg()+"");
         holder.pressure.setText(current.getPressure()+"");
-        String iconCode = current.getWeather().get(0).getIcon();
 //        String iconCode = response.body().getCurrent().getWeather().get(0).getIcon();
-        Picasso.get().load("https://openweathermap.org/img/wn/"+iconCode+"@2x.png").
+        Picasso.get().load("https://openweathermap.org/img/wn/"+current.getIcon()+"@2x.png").
                 placeholder(R.drawable.ic_launcher_background).into(holder.imageView);
-        holder.status.setText(current.getWeather().get(0).getDescription());
+        holder.status.setText(current.getDescription());
     }
 
     @Override
@@ -70,15 +70,22 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        int size = getItemCount();
+        dailies.clear();
+        notifyItemRangeRemoved(0 , size);
+    }
+
 
     public class WeatherViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView imageView;
         private  TextView time;
         private  TextView humidity;
-        private  TextView maxtemp;
-        private  TextView mintemp;
+//        private  TextView maxtemp;
+//        private  TextView mintemp;
         private  TextView wind;
+        private  TextView windDeg;
         private  TextView pressure;
         private TextView status;
 
@@ -87,9 +94,10 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
             imageView = itemView.findViewById(R.id.imageView_icon);
             time = itemView.findViewById(R.id.time_id);
             humidity = itemView.findViewById(R.id.humidity_id);
-            maxtemp = itemView.findViewById(R.id.maxtemp_id);
-            mintemp = itemView.findViewById(R.id.mintemp_id);
+//            maxtemp = itemView.findViewById(R.id.maxtemp_id);
+//            mintemp = itemView.findViewById(R.id.mintemp_id);
             wind = itemView.findViewById(R.id.wind_id);
+            windDeg = itemView.findViewById(R.id.wind_deg);
             pressure = itemView.findViewById(R.id.pressure_id);
             status = itemView.findViewById(R.id.status_id);
         }

@@ -23,6 +23,8 @@ public class WeatherRepository {
     private final MutableLiveData<String> message;
     private final MutableLiveData<OpenWeatherMap> openWeatherMap;
 
+    private static long CACHE_TIME = System.currentTimeMillis() - (12 * 60 * 60 * 1000);
+
     public WeatherRepository(Application application) {
         db = AppDatabase.getDatabase(application);
         message = new MutableLiveData<>();
@@ -33,29 +35,37 @@ public class WeatherRepository {
         NetworkService.getInstance().getMyApi().getWeatherByCityName(cityName).enqueue(new Callback<CoordResponse>() {
             @Override
             public void onResponse(Call<CoordResponse> call, Response<CoordResponse> response) {
+                Log.i("Asflafka", "onResponse: " + response.code());
                 if (response.isSuccessful()) {
-                    Double lat = response.body().getLat();
-                    Double lon = response.body().getLon();
-                    CoordResponse coordResponse = new CoordResponse();
-                    coordResponse.setLat(lat);
-                    coordResponse.setLon(lon);
-                    coordResponse.setCityName(cityName);
-                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                        if (db.coordResponseDao().getByCityName(cityName).size() > 0) {
+                    Double lat = response.body().getCoord().getLat();
+                    Double lon = response.body().getCoord().getLon();
+                    if (lat == null || lon == null){
+                        message.postValue("City not found!");
+                    }else {
+                        CoordResponse coordResponse = new CoordResponse();
+                        coordResponse.setLat(lat);
+                        coordResponse.setLon(lon);
+                        coordResponse.setCityName(cityName);
+                        coordResponse.saved_at = System.currentTimeMillis();
+                        AppDatabase.databaseWriteExecutor.execute(() -> {
                             db.coordResponseDao().deleteWithCityName(cityName);
-                        }
-                        db.coordResponseDao().insert(response.body());
-                    });
-                    refreshOpenWeatherMapDataWithNetwork(coordResponse.getLat(), coordResponse.getLon());
+                            db.coordResponseDao().insert(coordResponse);
+                        });
+                        refreshOpenWeatherMapDataWithNetwork(coordResponse.getLat(), coordResponse.getLon());
+                    }
+                }else {
+                    message.postValue("City not found!");
                 }
             }
 
             @Override
             public void onFailure(Call<CoordResponse> call, Throwable t) {
                 AppDatabase.databaseWriteExecutor.execute(() -> {
-                    if (db.coordResponseDao().getByCityName(cityName).size() > 0) {
-                        CoordResponse cache = db.coordResponseDao().getByCityName(cityName).get(0);
+                    if (db.coordResponseDao().getByCityName(cityName , CACHE_TIME).size() > 0) {
+                        CoordResponse cache = db.coordResponseDao().getByCityName(cityName , CACHE_TIME).get(0);
                         refreshOpenWeatherMapDataWithNetwork(cache.getLat(), cache.getLon());
+                    }else {
+                        message.postValue("City not found!");
                     }
                 });
             }
@@ -73,7 +83,7 @@ public class WeatherRepository {
                             message.postValue("Error: response.body() is null or response.body().getCurrent() is null");
                             return;
                         }
-                        OpenWeatherMap lastCache = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon);
+                        OpenWeatherMap lastCache = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon , CACHE_TIME);
                         if (lastCache != null) {
                             for (Daily daily : db.dailyDao().getWithFk(lastCache.getId())
                             ) {
@@ -83,8 +93,9 @@ public class WeatherRepository {
                             db.dailyDao().delete(lastCache.getId());
                             db.openWeatherMapDao().delete(lastCache);
                         }
+                        response.body().saved_at = System.currentTimeMillis();
                         db.openWeatherMapDao().insert(response.body());
-                        int id = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon).getId();
+                        int id = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon, CACHE_TIME).getId();
                         Log.d("API", "id after insert: " + id);
                         response.body().getCurrent().setOpenWeatherMapFk(id);
                         db.dailyDao().insert(response.body().getCurrent());
@@ -119,14 +130,14 @@ public class WeatherRepository {
 
             @Override
             public void onFailure(Call<OpenWeatherMap> call, Throwable t) {
-                // TODO call refreshOpenWeatherMapData and check time for cache,
+                message.postValue("Error");
             }
         });
     }
 
-    private void refreshOpenWeatherMapData(double lat, double lon) {
+    public void refreshOpenWeatherMapData(double lat, double lon) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            OpenWeatherMap result = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon);
+            OpenWeatherMap result = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon, CACHE_TIME);
             if (result == null) {
                 return;
             }
@@ -145,12 +156,24 @@ public class WeatherRepository {
             message.postValue("Loaded");
         });
     }
+    public void refreshOpenWeatherMapData(String cityName) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            List<CoordResponse> list = db.coordResponseDao().getByCityName(cityName , CACHE_TIME);
+
+            if (list.size() == 0){
+                return;
+            }
+
+
+            refreshOpenWeatherMapData(list.get(0).getLat(), list.get(0).getLon());
+        });
+    }
 
     public LiveData<OpenWeatherMap> getOpenWeatherMap() {
         return openWeatherMap;
     }
 
-    public LiveData<String> getMessage() {
+    public MutableLiveData<String> getMessage() {
         return message;
     }
 }

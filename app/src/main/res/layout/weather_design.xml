@@ -72,17 +72,17 @@
                         android:layout_marginTop="5dp"
                         android:text="@string/humidity" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/max_temp" />
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="5dp"-->
+<!--                        android:text="@string/max_temp" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/min_temp" />
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="5dp"-->
+<!--                        android:text="@string/min_temp" />-->
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -95,6 +95,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="@string/wind_speed" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/wind_deg" />
 
                 </LinearLayout>
 
@@ -117,19 +123,19 @@
                         android:layout_marginTop="5dp"
                         android:text="@string/default_value" />
 
-                    <TextView
-                        android:id="@+id/maxtemp_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/default_value" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/maxtemp_id"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="5dp"-->
+<!--                        android:text="@string/default_value" />-->
 
-                    <TextView
-                        android:id="@+id/mintemp_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/default_value" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/mintemp_id"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="5dp"-->
+<!--                        android:text="@string/default_value" />-->
 
                     <TextView
                         android:id="@+id/pressure_id"
@@ -140,6 +146,13 @@
 
                     <TextView
                         android:id="@+id/wind_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/default_value" />
+
+                    <TextView
+                        android:id="@+id/wind_deg"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

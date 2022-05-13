@@ -2,6 +2,7 @@ package ir.ben.fakeweather.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -27,6 +28,11 @@ public class CoordResponse {
     @SerializedName("lon")
     @Expose
     private Double lon;
+
+    @Ignore
+    private CoordModel coord;
+
+    public long saved_at = 0;
 
     public Double getLat() {
         return lat;
@@ -59,4 +65,13 @@ public class CoordResponse {
     public void setId(int id) {
         this.id = id;
     }
+
+    public CoordModel getCoord() {
+        return coord;
+    }
+
+    public void setCoord(CoordModel coord) {
+        this.coord = coord;
+    }
+
 }

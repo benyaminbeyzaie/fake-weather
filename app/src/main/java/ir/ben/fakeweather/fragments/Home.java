@@ -8,11 +8,15 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +41,9 @@ import ir.ben.fakeweather.models.OpenWeatherMap;
 import ir.ben.fakeweather.models.Temp;
 import ir.ben.fakeweather.models.Weather;
 import ir.ben.fakeweather.network.NetworkService;
+import ir.ben.fakeweather.utils.Functions;
 import ir.ben.fakeweather.utils.WeatherAdaptor;
+import ir.ben.fakeweather.view_models.WeatherViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,8 +67,8 @@ public class Home extends Fragment {
     private final String CITY = "city";
 
 
-    public Home() {
-    }
+    private WeatherViewModel weatherViewModel;
+
 
 
     @Override
@@ -74,6 +80,7 @@ public class Home extends Fragment {
         editor = sharedPref.edit();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
         radio = (RadioGroup) view.findViewById(R.id.radio_button);
 
@@ -121,22 +128,24 @@ public class Home extends Fragment {
             public void onClick(View v) {
                 if (isByCity) {
                     String inputCity = cityName.getText().toString();
-                    if (inputCity.isEmpty()) {
-                        Toast.makeText(getContext(),
-                                "Invalid City Name",
-                                Toast.LENGTH_LONG).show();
-                    } else {
+
+                    try {
+                        weatherViewModel.refresh(inputCity);
+                        weatherAdaptor.clear();
+                    }catch (Exception e){
+                        Functions.toast(getContext() , "Invalid City Name");
                     }
                 } else {
                     String latStr = latEdit.getText().toString();
                     String lonStr = lonEdit.getText().toString();
-                    if (latStr.isEmpty() || lonStr.isEmpty()) {
-                        Toast.makeText(getContext(),
-                                "Invalid Lat or Lon",
-                                Toast.LENGTH_LONG).show();
-                    } else {
 
+                    try {
+                        weatherViewModel.refresh(Double.parseDouble(latStr) , Double.parseDouble(lonStr));
+                        weatherAdaptor.clear();
+                    }catch (Exception e){
+                        Functions.toast(getContext() , "Invalid Lat or Lon");
                     }
+
                 }
             }
         });
@@ -145,25 +154,21 @@ public class Home extends Fragment {
         return view;
     }
 
-    private Double convertStrToDouble(String str) {
-        if (str == null)
-            return null;
 
-        return Double.parseDouble(str);
-    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    public boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
 
-    public boolean isInternetAvailable() {
-        try {
-            InetAddress address = InetAddress.getByName("www.google.com");
-            return !address.equals("");
-        } catch (UnknownHostException e) {
-            // Log error
-        }
-        return false;
+        weatherViewModel.getOpenWeatherMapLiveData()
+                .observe(getViewLifecycleOwner() , openWeatherMap -> {
+                    Log.i("Asgfagagsa", "onViewCreated: " + openWeatherMap.toString());
+                    weatherAdaptor.setDailies(openWeatherMap.getDaily());
+                });
+
+        weatherViewModel.getMessage()
+                .observe(getViewLifecycleOwner() , s -> {
+                    Functions.toast(getContext() , s);
+                });
     }
 }

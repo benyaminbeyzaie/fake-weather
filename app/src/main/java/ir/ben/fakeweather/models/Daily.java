@@ -33,10 +33,10 @@ import com.google.gson.annotations.SerializedName;
 @Generated("jsonschema2pojo")
 public class Daily {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "open_weather_map_fk")
-    private int openWeatherMapFk;
+    private long openWeatherMapFk;
 
     @ColumnInfo(name = "dt")
     @SerializedName("dt")
@@ -74,19 +74,19 @@ public class Daily {
     @Expose
     private List<Weather> weather = null;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getOpenWeatherMapFk() {
+    public long getOpenWeatherMapFk() {
         return openWeatherMapFk;
     }
 
-    public void setOpenWeatherMapFk(int openWeatherMapFk) {
+    public void setOpenWeatherMapFk(long openWeatherMapFk) {
         this.openWeatherMapFk = openWeatherMapFk;
     }
 
@@ -146,19 +146,6 @@ public class Daily {
         this.temp = temp;
     }
 
-    @Override
-    public String toString() {
-        return "Daily{" +
-                "id=" + id +
-                ", openWeatherMapFk=" + openWeatherMapFk +
-                ", dt=" + dt +
-                ", pressure=" + pressure +
-                ", humidity=" + humidity +
-                ", windSpeed=" + windSpeed +
-                ", windDeg=" + windDeg +
-                ", weather=" + weather +
-                '}';
-    }
     public static class TempDes implements JsonDeserializer<Temp> {
         @Override
         public Temp deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
@@ -202,6 +189,21 @@ public class Daily {
         }else {
             return "";
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Daily{" +
+                "id=" + id +
+                ", openWeatherMapFk=" + openWeatherMapFk +
+                ", dt=" + dt +
+                ", temp=" + temp +
+                ", pressure=" + pressure +
+                ", humidity=" + humidity +
+                ", windSpeed=" + windSpeed +
+                ", windDeg=" + windDeg +
+                ", weather=" + weather +
+                '}';
     }
 }
 

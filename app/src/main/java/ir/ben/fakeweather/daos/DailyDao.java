@@ -11,14 +11,14 @@ import ir.ben.fakeweather.models.Daily;
 @Dao
 public interface DailyDao {
     @Query("SELECT * FROM daily WHERE open_weather_map_fk LIKE :fk")
-    List<Daily> getWithFk(int fk);
+    List<Daily> getWithFk(long fk);
 
     @Insert
-    void insert(Daily daily);
+    long insert(Daily daily);
 
     @Insert
     void insertAll(List<Daily> dailies);
 
     @Query("DELETE FROM daily WHERE open_weather_map_fk LIKE :fk")
-    void delete(int fk);
+    void delete(long fk);
 }

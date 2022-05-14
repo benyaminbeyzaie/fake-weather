@@ -18,7 +18,7 @@ import com.google.gson.annotations.SerializedName;
 @Generated("jsonschema2pojo")
 public class OpenWeatherMap {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "lat")
     @SerializedName("lat")
@@ -52,11 +52,11 @@ public class OpenWeatherMap {
 
     public long saved_at = 0;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -118,6 +118,7 @@ public class OpenWeatherMap {
                 ", timezoneOffset=" + timezoneOffset +
                 ", current=" + current +
                 ", daily=" + daily +
+                ", saved_at=" + saved_at +
                 '}';
     }
 }

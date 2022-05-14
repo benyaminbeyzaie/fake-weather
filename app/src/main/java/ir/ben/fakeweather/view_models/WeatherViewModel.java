@@ -25,18 +25,18 @@ public class WeatherViewModel extends AndroidViewModel {
 
     public void refresh(double lat, double lon) {
         if (Functions.isNetworkAvailable(getApplication())){
-            repository.refreshOpenWeatherMapDataWithNetwork(lat, lon);
+            repository.refresh(lat, lon);
         }else {
-            repository.refreshOpenWeatherMapData(lat, lon);
+            repository.refreshFromCache(lat, lon);
             message.postValue("You are offline!");
         }
     }
 
     public void refresh(String cityName) {
         if (Functions.isNetworkAvailable(getApplication())){
-            repository.refreshWeatherDataByCityName(cityName);
+            repository.refresh(cityName);
         }else {
-            repository.refreshOpenWeatherMapData(cityName);
+            repository.refresh(cityName);
             message.postValue("You are offline!");
         }
     }

@@ -14,7 +14,7 @@ import javax.annotation.Generated;
 @Generated("jsonschema2pojo")
 public class CoordResponse {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "cityName")
     private String cityName;
@@ -31,8 +31,6 @@ public class CoordResponse {
 
     @Ignore
     private CoordModel coord;
-
-    public long saved_at = 0;
 
     public Double getLat() {
         return lat;
@@ -58,11 +56,11 @@ public class CoordResponse {
         this.cityName = cityName;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -74,4 +72,14 @@ public class CoordResponse {
         this.coord = coord;
     }
 
+    @Override
+    public String toString() {
+        return "CoordResponse{" +
+                "id=" + id +
+                ", cityName='" + cityName + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", coord=" + coord +
+                '}';
+    }
 }

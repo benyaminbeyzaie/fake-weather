@@ -11,8 +11,8 @@ import ir.ben.fakeweather.models.CoordResponse;
 
 @Dao
 public interface CoordResponseDao {
-    @Query("SELECT * FROM coord_response WHERE cityName LIKE :cityName AND saved_at > :ts")
-    List<CoordResponse> getByCityName(String cityName , long ts);
+    @Query("SELECT * FROM coord_response WHERE cityName LIKE :cityName")
+    List<CoordResponse> getByCityName(String cityName);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(CoordResponse coordResponse);

@@ -25,7 +25,7 @@ public class Weather {
     private long id = 0;
 
     @ColumnInfo(name = "fk")
-    private int dailyFk;
+    private long dailyFk;
 
     @ColumnInfo(name = "main")
     @SerializedName("main")
@@ -42,11 +42,11 @@ public class Weather {
     @Expose
     private String icon;
 
-    public int getDailyFk() {
+    public long getDailyFk() {
         return dailyFk;
     }
 
-    public void setDailyFk(int dailyFk) {
+    public void setDailyFk(long dailyFk) {
         this.dailyFk = dailyFk;
     }
 

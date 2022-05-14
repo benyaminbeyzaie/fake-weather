@@ -12,11 +12,11 @@ import ir.ben.fakeweather.models.Weather;
 @Dao
 public interface WeatherDao {
     @Query("SELECT * FROM weather WHERE fk LIKE :fk")
-    List<Weather> get(int fk);
+    List<Weather> get(long fk);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Weather weather);
 
     @Query("DELETE FROM weather WHERE fk LIKE :fk")
-    void delete(int fk);
+    void delete(long fk);
 }

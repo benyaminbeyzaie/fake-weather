@@ -13,11 +13,11 @@ import ir.ben.fakeweather.models.Weather;
 
 @Dao
 public interface OpenWeatherMapDao {
-    @Query("SELECT * FROM open_weather_map WHERE lat LIKE :lat AND lon LIKE :lon AND saved_at > :ts")
-    OpenWeatherMap getOpenWeatherMapWithLatLong(double lat, double lon, long ts);
+    @Query("SELECT * FROM open_weather_map WHERE lat LIKE :lat AND lon LIKE :lon")
+    OpenWeatherMap getOpenWeatherMapWithLatLong(double lat, double lon);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(OpenWeatherMap openWeatherMap);
+    long insert(OpenWeatherMap openWeatherMap);
 
     @Delete
     void delete(OpenWeatherMap openWeatherMap);

@@ -22,10 +22,10 @@ import com.google.gson.annotations.SerializedName;
 @Generated("jsonschema2pojo")
 public class Temp {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "daily_fk")
-    private int dailyFk;
+    private long dailyFk;
 
     @ColumnInfo(name = "min")
     @SerializedName("min")
@@ -37,19 +37,19 @@ public class Temp {
     @Expose
     private Double max;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getDailyFk() {
+    public long getDailyFk() {
         return dailyFk;
     }
 
-    public void setDailyFk(int dailyFk) {
+    public void setDailyFk(long dailyFk) {
         this.dailyFk = dailyFk;
     }
 
@@ -69,4 +69,13 @@ public class Temp {
         this.max = max;
     }
 
+    @Override
+    public String toString() {
+        return "Temp{" +
+                "id=" + id +
+                ", dailyFk=" + dailyFk +
+                ", min=" + min +
+                ", max=" + max +
+                '}';
+    }
 }

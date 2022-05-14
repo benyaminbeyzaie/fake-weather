@@ -19,11 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,6 +79,7 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        LinearLayout darkThemeLayout = new LinearLayout(new ContextThemeWrapper(getContext(), R.style.Theme_FakeWeather3));
 
         sharedPref = getContext().getSharedPreferences("Weather", MODE_PRIVATE);
         editor = sharedPref.edit();
@@ -177,7 +180,8 @@ public class Home extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         weatherViewModel.getOpenWeatherMapLiveData()
                 .observe(getViewLifecycleOwner() , openWeatherMap -> {
-                    weatherAdaptor.setDailies(openWeatherMap.getDaily().subList(1, openWeatherMap.getDaily().size()));
+//                    weatherAdaptor.setDailies(openWeatherMap.getDaily().subList(1, openWeatherMap.getDaily().size()));
+                    weatherAdaptor.setDailies(openWeatherMap.getDaily());
                 });
 
         weatherViewModel.getMessage()

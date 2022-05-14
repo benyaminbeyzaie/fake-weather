@@ -11,10 +11,14 @@
     <string name="time_string">Time</string>
     <string name="max_temp">Max. Temp.</string>
     <string name="min_temp">Min. Temp.</string>
+    <string name="current_temp">Temperature</string>
     <string name="wind_speed">Wind Speed</string>
     <string name="humidity">Humidity</string>
     <string name="pressure">Pressure</string>
     <string name="default_value">.</string>
     <string name="wind_degree">Wind Direction</string>
-    <string name="wind_deg">Wind deg</string>
+    <string name="wind_deg">Wind Dir.</string>
+    <string name="location">Location</string>
+    <string name="current_weather">Current Weather</string>
+    <string name="daily_weather">Daily Weather</string>
 </resources>

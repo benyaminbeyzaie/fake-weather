@@ -16,4 +16,5 @@
     <string name="pressure">Pressure</string>
     <string name="default_value">.</string>
     <string name="wind_degree">Wind Direction</string>
+    <string name="wind_deg">Wind deg</string>
 </resources>

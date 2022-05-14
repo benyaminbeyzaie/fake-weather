@@ -187,6 +187,22 @@ public class Daily {
             return json.getAsDouble();
         }
     }
+
+    public String getIcon(){
+        if (getWeather().size() > 0){
+            return getWeather().get(0).getIcon();
+        }else {
+            return "";
+        }
+    }
+
+    public String getDescription(){
+        if (getWeather().size() > 0){
+            return getWeather().get(0).getDescription();
+        }else {
+            return "";
+        }
+    }
 }
 
 

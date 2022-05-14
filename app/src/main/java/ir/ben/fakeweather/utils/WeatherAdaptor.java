@@ -121,6 +121,12 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        int size = getItemCount();
+        dailies.clear();
+        notifyItemRangeRemoved(0 , size);
+    }
+
 
     public class WeatherViewHolder extends RecyclerView.ViewHolder {
 

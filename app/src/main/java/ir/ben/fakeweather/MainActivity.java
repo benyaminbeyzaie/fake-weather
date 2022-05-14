@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uiStateViewModel = new ViewModelProvider(this).get(UiStateViewModel.class);
-        WeatherViewModel weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+//        WeatherViewModel weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
-        weatherViewModel.refresh(51.5072, 0.1276);
+//        weatherViewModel.refresh(51.5072, 0.1276);
 
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 

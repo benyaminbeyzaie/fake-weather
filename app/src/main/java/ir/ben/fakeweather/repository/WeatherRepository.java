@@ -143,12 +143,14 @@ public class WeatherRepository {
             }
             Daily current = db.dailyDao().getWithFk(result.getId()).get(0);
             current.setWeather(db.weatherDao().get(current.getId()));
+            current.setTemp(db.tempDao().getTemp(current.getId()));
             result.setCurrent(current);
 
             List<Daily> dailies = db.dailyDao().getWithFk(result.getId());
             for (Daily daily :
                     dailies) {
                 daily.setWeather(db.weatherDao().get(daily.getId()));
+                daily.setTemp(db.tempDao().getTemp(daily.getId()));
             }
 
             result.setDaily(dailies);

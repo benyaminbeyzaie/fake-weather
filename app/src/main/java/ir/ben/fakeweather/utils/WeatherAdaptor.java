@@ -80,8 +80,8 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
         }
 
         holder.humidity.setText(":\t"  +current.getHumidity() + "");
-        holder.maxtemp.setText(":\t"  +current.getTemp().getMax() + "");
-        holder.mintemp.setText(":\t"  +current.getTemp().getMin() + "");
+//        holder.maxtemp.setText(":\t"  +current.getTemp().getMax() + "");
+//        holder.mintemp.setText(":\t"  +current.getTemp().getMin() + "");
 //        holder.wind.setText(current.getWindSpeed()+"");
 //        holder.pressure.setText(current.getPressure()+"");
         String iconCode = current.getWeather().get(0).getIcon();

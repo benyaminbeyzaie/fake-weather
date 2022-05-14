@@ -11,6 +11,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,7 +70,7 @@ public class Home extends Fragment {
 
 
     private WeatherViewModel weatherViewModel;
-
+    LiveData<OpenWeatherMap> openWeatherMapLiveData ;
 
 
     @Override
@@ -81,6 +83,10 @@ public class Home extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+        openWeatherMapLiveData = weatherViewModel.getOpenWeatherMapLiveData();
+
+
+
 
         radio = (RadioGroup) view.findViewById(R.id.radio_button);
 
@@ -123,6 +129,15 @@ public class Home extends Fragment {
         weatherAdaptor = new WeatherAdaptor();
         recyclerView.setAdapter(weatherAdaptor);
 
+        openWeatherMapLiveData.observe(getActivity(), new Observer<OpenWeatherMap>() {
+            @Override
+            public void onChanged(OpenWeatherMap openWeatherMap) {
+                weatherAdaptor.setDailies(openWeatherMap.getDaily());
+            }
+        });
+        weatherViewModel.refresh(51.5072, 0.1276);
+
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,8 +145,10 @@ public class Home extends Fragment {
                     String inputCity = cityName.getText().toString();
 
                     try {
-                        weatherViewModel.refresh(inputCity);
+//                        LiveData<OpenWeatherMap> openWeatherMapLiveData = weatherViewModel.getOpenWeatherMapLiveData();
                         weatherAdaptor.clear();
+                        weatherViewModel.refresh(inputCity);
+                        List<Daily> daily = openWeatherMapLiveData.getValue().getDaily();
                     }catch (Exception e){
                         Functions.toast(getContext() , "Invalid City Name");
                     }
@@ -140,8 +157,8 @@ public class Home extends Fragment {
                     String lonStr = lonEdit.getText().toString();
 
                     try {
-                        weatherViewModel.refresh(Double.parseDouble(latStr) , Double.parseDouble(lonStr));
                         weatherAdaptor.clear();
+                        weatherViewModel.refresh(Double.parseDouble(latStr) , Double.parseDouble(lonStr));
                     }catch (Exception e){
                         Functions.toast(getContext() , "Invalid Lat or Lon");
                     }

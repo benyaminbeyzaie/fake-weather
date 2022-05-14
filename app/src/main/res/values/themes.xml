@@ -18,7 +18,7 @@
         <item name="colorErrorContainer">@color/md_theme_dark_errorContainer</item>
         <item name="colorOnError">@color/md_theme_dark_onError</item>
         <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer</item>
-        <item name="android:colorBackground">@color/white</item>
+        <item name="android:colorBackground">#FEE2C5</item>
         <item name="colorOnBackground">@color/md_theme_dark_onBackground</item>
         <item name="colorSurface">@color/md_theme_dark_surface</item>
         <item name="colorOnSurface">@color/md_theme_dark_onSurface</item>
@@ -26,7 +26,7 @@
         <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant</item>
         <item name="colorOutline">@color/md_theme_dark_outline</item>
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
+        <item name="colorSurfaceInverse">#FEE2C5</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_primaryInverse</item>
         <item name="cardBackgroundColor">#DD8CFF</item>
         <item name="android:textColor">@color/black</item>
@@ -61,7 +61,7 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_primaryInverse</item>
-        <item name="cardBackgroundColor">#DD8CFF</item>
+        <item name="cardBackgroundColor">#7FB5FF</item>
         <item name="android:textColor">@color/black</item>
         <!-- Customize your theme here. -->
     </style>
@@ -130,9 +130,9 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_primaryInverse</item>
-        <item name="cardBackgroundColor">#C8BCF6</item>
+        <item name="cardBackgroundColor">#C4DDFF</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:background">#C8BCF6</item>
+        <item name="android:background">#C4DDFF</item>
 
         <!-- Customize your theme here. -->
     </style>

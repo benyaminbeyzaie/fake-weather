@@ -16,6 +16,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Theme.FakeWeather4"
             android:layout_margin="5dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="20dp">
@@ -24,8 +25,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:orientation="vertical"
-                android:theme="@style/Theme.FakeWeather3">
+                android:orientation="vertical">
 
                 <RadioGroup
                     android:id="@+id/radio_button"
@@ -88,6 +88,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/current_card_view"
             style="@style/Theme.FakeWeather4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -115,6 +116,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="7dp"
+                    android:visibility="visible"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"

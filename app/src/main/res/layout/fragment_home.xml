@@ -9,218 +9,304 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <LinearLayout
-            style="@style/Theme.FakeWeather"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:background="#DFC9C9"
-            android:orientation="vertical">
 
-            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Theme.FakeWeather4"
+            android:layout_margin="5dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="20dp">
+
+            <LinearLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/radio_button"
+                android:layout_height="300dp"
                 android:orientation="vertical">
 
-                <RadioButton android:id="@+id/radio_pirates"
+                <RadioGroup
+                    android:id="@+id/radio_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/radio_pirates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30px"
+                        android:text="Search by city name" />
+
+                    <RadioButton
+                        android:id="@+id/radio_ninjas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30px"
+                        android:checked="true"
+                        android:text="Search by location" />
+                </RadioGroup>
+
+                <EditText
+                    android:id="@+id/city_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="City Name"
+                    android:inputType="text"
+                    android:visibility="invisible" />
+
+                <EditText
+                    android:id="@+id/lat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="LAT"
+                    android:inputType="numberDecimal"
+                    android:visibility="visible" />
+
+                <EditText
+                    android:id="@+id/lon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="LON"
+                    android:inputType="numberDecimal"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/search_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30px"
-                    android:text="Search by city name"
-                    />
-                <RadioButton android:id="@+id/radio_ninjas"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10px"
+                    android:text="Search"
+                    android:visibility="visible" />
+
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/current_card_view"
+            style="@style/Theme.FakeWeather4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="30px"
                     android:layout_height="wrap_content"
-                    android:text="Search by location"/>
-            </RadioGroup>
+                    android:text="@string/current_weather"
+                    android:textSize="24sp" />
 
-            <EditText
-                android:id="@+id/city_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:hint="City Name"
-                android:inputType="text" />
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_current"
+                    style="@style/Theme.FakeWeather2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:visibility="visible"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/lat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:hint="LAT"
-                android:inputType="numberDecimal" />
-
-            <EditText
-                android:id="@+id/lon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:hint="LON"
-                android:inputType="numberDecimal" />
-
-            <Button
-                android:id="@+id/search_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10px"
-                android:layout_centerHorizontal="true"
-                android:text="Search"
-                android:visibility="invisible"
-                android:layout_gravity="center"
-                />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp">
 
 
-        </LinearLayout>
+                        <ImageView
+                            android:id="@+id/imageView_current"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:layout_marginStart="36dp"
+                            android:layout_marginTop="34dp"
+                            android:layout_marginBottom="41dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_launcher_background" />
 
-        <!--        <androidx.cardview.widget.CardView-->
-        <!--            android:id="@+id/cardView_current"-->
-        <!--            style="@style/Theme.FakeWeather2"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="7dp"-->
-        <!--            app:cardCornerRadius="20dp"-->
-        <!--            app:cardElevation="20dp"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent">-->
+                        <TextView
+                            android:id="@+id/status_id_current"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="TextView"
+                            app:layout_constraintEnd_toEndOf="@+id/imageView_current"
+                            app:layout_constraintStart_toStartOf="@+id/imageView_current"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView_current" />
 
-        <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="150dp">-->
+                        <LinearLayout
+                            android:layout_width="214dp"
+                            android:layout_height="0dp"
+                            android:layout_marginEnd="25dp"
+                            android:layout_marginBottom="1dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:orientation="vertical">
 
-        <!--                <ImageView-->
-        <!--                    android:id="@+id/imageView_current"-->
-        <!--                    android:layout_width="75dp"-->
-        <!--                    android:layout_height="75dp"-->
-        <!--                    android:layout_marginStart="16dp"-->
-        <!--                    android:layout_marginTop="34dp"-->
-        <!--                    android:layout_marginBottom="41dp"-->
-        <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                    app:layout_constraintStart_toStartOf="parent"-->
-        <!--                    app:layout_constraintTop_toTopOf="parent"-->
-        <!--                    app:srcCompat="@drawable/ic_launcher_background" />-->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/time_string" />
 
-        <!--                <LinearLayout-->
-        <!--                    android:layout_width="294dp"-->
-        <!--                    android:layout_height="149dp"-->
-        <!--                    android:layout_marginStart="13dp"-->
-        <!--                    android:layout_marginBottom="1dp"-->
-        <!--                    android:gravity="center_vertical"-->
-        <!--                    android:orientation="horizontal"-->
-        <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                    app:layout_constraintStart_toEndOf="@+id/imageView_current"-->
-        <!--                    app:layout_constraintTop_toTopOf="parent">-->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/location" />
 
-        <!--                    <LinearLayout-->
-        <!--                        android:layout_width="wrap_content"-->
-        <!--                        android:layout_height="wrap_content"-->
-        <!--                        android:layout_marginStart="25dp"-->
-        <!--                        android:orientation="vertical">-->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/current_temp" />
 
-        <!--                        <TextView-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:text="@string/time_string" />-->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/humidity" />
 
-        <!--                        <TextView-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/humidity" />-->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/pressure" />
 
-        <!--                        <TextView-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/max_temp" />-->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/wind_speed" />
 
-        <!--                        <TextView-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/min_temp" />-->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/wind_deg" />
 
-        <!--                        <TextView-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/pressure" />-->
+                            </LinearLayout>
 
-        <!--                        <TextView-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/wind_speed" />-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:orientation="vertical">
 
-        <!--                    </LinearLayout>-->
+                                <TextView
+                                    android:id="@+id/time_id_current"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/default_value" />
 
-        <!--                    <LinearLayout-->
-        <!--                        android:layout_width="wrap_content"-->
-        <!--                        android:layout_height="wrap_content"-->
-        <!--                        android:layout_marginStart="10dp"-->
-        <!--                        android:orientation="vertical">-->
+                                <TextView
+                                    android:id="@+id/location_id_current"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/default_value" />
 
-        <!--                        <TextView-->
-        <!--                            android:id="@+id/time_id_current"-->
-        <!--                            android:layout_width="match_parent"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:text="@string/default_value" />-->
+                                <TextView
+                                    android:id="@+id/temp_id_current"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/default_value" />
 
-        <!--                        <TextView-->
-        <!--                            android:id="@+id/humidity_id_current"-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/default_value" />-->
+                                <TextView
+                                    android:id="@+id/humidity_id_current"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/default_value" />
 
-        <!--                        <TextView-->
-        <!--                            android:id="@+id/maxtemp_id_current"-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/default_value" />-->
+                                <TextView
+                                    android:id="@+id/pressure_id_current"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/default_value" />
 
-        <!--                        <TextView-->
-        <!--                            android:id="@+id/mintemp_id_current"-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/default_value" />-->
+                                <TextView
+                                    android:id="@+id/wind_id_current"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/default_value" />
 
-        <!--                        <TextView-->
-        <!--                            android:id="@+id/pressure_id_current"-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/default_value" />-->
-
-        <!--                        <TextView-->
-        <!--                            android:id="@+id/wind_id_current"-->
-        <!--                            android:layout_width="wrap_content"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="5dp"-->
-        <!--                            android:text="@string/default_value" />-->
-
-
-        <!--                    </LinearLayout>-->
-
-
-        <!--                </LinearLayout>-->
+                                <TextView
+                                    android:id="@+id/wind_dir_id_current"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="@string/default_value" />
 
 
-        <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-        <!--        </androidx.cardview.widget.CardView>-->
+                            </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+
+                        </LinearLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/Theme.FakeWeather4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/weather_design" />
+            android:layout_margin="5dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/daily_weather"
+                    android:textSize="24sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="7dp"
+                    tools:listitem="@layout/weather_design" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 </FrameLayout>

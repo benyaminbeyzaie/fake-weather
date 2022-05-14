@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        style="@style/Theme.FakeWeather"
+        style="@style/Theme.FakeWeather2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="7dp"
@@ -46,9 +46,9 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="214dp"
+                android:layout_width="230dp"
                 android:layout_height="119dp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginEnd="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +58,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
+                    android:layout_marginStart="10dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -124,15 +124,6 @@
 
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="20sp"
-                tools:layout_editor_absoluteX="383dp"
-                tools:layout_editor_absoluteY="91dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

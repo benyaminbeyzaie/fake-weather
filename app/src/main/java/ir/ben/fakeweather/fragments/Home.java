@@ -2,53 +2,42 @@ package ir.ben.fakeweather.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
-import android.util.Log;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import ir.ben.fakeweather.R;
-import ir.ben.fakeweather.database.AppDatabase;
-import ir.ben.fakeweather.models.CoordResponse;
 import ir.ben.fakeweather.models.Daily;
 import ir.ben.fakeweather.models.OpenWeatherMap;
-import ir.ben.fakeweather.models.Temp;
-import ir.ben.fakeweather.models.Weather;
-import ir.ben.fakeweather.network.NetworkService;
 import ir.ben.fakeweather.utils.Functions;
 import ir.ben.fakeweather.utils.WeatherAdaptor;
 import ir.ben.fakeweather.view_models.WeatherViewModel;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class Home extends Fragment {
@@ -61,8 +50,14 @@ public class Home extends Fragment {
     WeatherAdaptor weatherAdaptor;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
-    List<Daily> dailyList = new ArrayList<>();
     boolean isByCity = true;
+    CardView currentState;
+    CardView currentWeather;
+
+    TextView currentTime , currentLocation , currentTemp , currentHumidity , currentPresure , currentWindSpeed,currentWindDirection;
+    ImageView currentImage;
+    TextView currentStateView;
+
 
     private final String LAT = "lat";
     private final String LON = "lon";
@@ -77,6 +72,7 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        LinearLayout darkThemeLayout = new LinearLayout(new ContextThemeWrapper(getContext(), R.style.Theme_FakeWeather3));
 
         sharedPref = getContext().getSharedPreferences("Weather", MODE_PRIVATE);
         editor = sharedPref.edit();
@@ -86,6 +82,16 @@ public class Home extends Fragment {
         openWeatherMapLiveData = weatherViewModel.getOpenWeatherMapLiveData();
 
 
+        currentTime = view.findViewById(R.id.time_id_current);
+        currentLocation = view.findViewById(R.id.location_id_current);
+        currentTemp = view.findViewById(R.id.temp_id_current);
+        currentHumidity = view.findViewById(R.id.humidity_id_current);
+        currentPresure = view.findViewById(R.id.pressure_id_current);
+        currentWindSpeed = view.findViewById(R.id.wind_id_current);
+        currentWindDirection = view.findViewById(R.id.wind_dir_id_current);
+        currentImage=view.findViewById(R.id.imageView_current);
+        currentStateView = view.findViewById(R.id.status_id_current);
+
 
 
         radio = (RadioGroup) view.findViewById(R.id.radio_button);
@@ -93,6 +99,40 @@ public class Home extends Fragment {
         cityName = view.findViewById(R.id.city_name);
         latEdit = view.findViewById(R.id.lat);
         lonEdit = view.findViewById(R.id.lon);
+
+        currentState = view.findViewById(R.id.current_card_view);
+        currentWeather = view.findViewById(R.id.cardView_current);
+        currentState.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentWeather.getVisibility() == View.VISIBLE) {
+
+                    // The transition of the hiddenView is carried out
+                    //  by the TransitionManager class.
+                    // Here we use an object of the AutoTransition
+                    // Class to create a default transition.
+                    TransitionManager.beginDelayedTransition(currentState,
+                            new AutoTransition());
+                    currentWeather.setVisibility(View.GONE);
+//                    arrow.setImageResource(R.drawable.ic_baseline_expand_more_24);
+                }
+
+                // If the CardView is not expanded, set its visibility
+                // to visible and change the expand more icon to expand less.
+                else {
+
+                    TransitionManager.beginDelayedTransition(currentState,
+                            new AutoTransition());
+                    currentWeather.setVisibility(View.VISIBLE);
+//                    arrow.setImageResource(R.drawable.ic_baseline_expand_less_24);
+                }
+            }
+        });
+
+
+
+
+
 
         searchButton = view.findViewById(R.id.search_button);
 
@@ -129,12 +169,6 @@ public class Home extends Fragment {
         weatherAdaptor = new WeatherAdaptor();
         recyclerView.setAdapter(weatherAdaptor);
 
-//        openWeatherMapLiveData.observe(getActivity(), new Observer<OpenWeatherMap>() {
-//            @Override
-//            public void onChanged(OpenWeatherMap openWeatherMap) {
-//                weatherAdaptor.setDailies(openWeatherMap.getDaily());
-//            }
-//        });
         weatherViewModel.refresh(51.5072, 0.1276);
 
 
@@ -145,10 +179,7 @@ public class Home extends Fragment {
                     String inputCity = cityName.getText().toString();
 
                     try {
-//                        LiveData<OpenWeatherMap> openWeatherMapLiveData = weatherViewModel.getOpenWeatherMapLiveData();
-                        // weatherAdaptor.clear();
                         weatherViewModel.refresh(inputCity);
-                        List<Daily> daily = openWeatherMapLiveData.getValue().getDaily();
                     }catch (Exception e){
                         Functions.toast(getContext() , "Invalid City Name");
                     }
@@ -157,7 +188,6 @@ public class Home extends Fragment {
                     String lonStr = lonEdit.getText().toString();
 
                     try {
-                        //weatherAdaptor.clear();
                         weatherViewModel.refresh(Double.parseDouble(latStr) , Double.parseDouble(lonStr));
                     }catch (Exception e){
                         Functions.toast(getContext() , "Invalid Lat or Lon");
@@ -178,11 +208,27 @@ public class Home extends Fragment {
         weatherViewModel.getOpenWeatherMapLiveData()
                 .observe(getViewLifecycleOwner() , openWeatherMap -> {
                     weatherAdaptor.setDailies(openWeatherMap.getDaily().subList(1, openWeatherMap.getDaily().size()));
+//                    weatherAdaptor.setDailies(openWeatherMap.getDaily());
+                    changeCurrentWeatherStatus(openWeatherMap);
                 });
 
         weatherViewModel.getMessage()
                 .observe(getViewLifecycleOwner() , s -> {
                     Functions.toast(getContext() , s);
                 });
+    }
+
+
+    public void changeCurrentWeatherStatus(OpenWeatherMap openWeatherMap){
+        Daily current = openWeatherMap.getCurrent();
+        currentTemp.setText(":\t" + current.getTemp().getMax() + "");
+        currentPresure.setText(":\t" + current.getPressure() + "");
+        currentWindSpeed.setText(":\t" + current.getWindSpeed() + "");
+        currentWindDirection.setText(":\t" + current.getWindDeg() + "");
+        currentHumidity.setText(":\t" + current.getHumidity() + "");
+        currentStateView.setText(current.getWeather().get(0).getDescription());
+        String iconCode = current.getWeather().get(0).getIcon();
+        Picasso.get().load("https://openweathermap.org/img/wn/" + iconCode + "@2x.png").
+                placeholder(R.drawable.ic_launcher_background).into(currentImage);
     }
 }

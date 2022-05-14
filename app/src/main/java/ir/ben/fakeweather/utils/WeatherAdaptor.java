@@ -55,8 +55,8 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
 
         Date date = calendar.getTime();
         String tod = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
-//        today = map2.get(tod);
-        today = map2.get("Sunday");
+        today = map2.get(tod);
+//        today = map2.get("Wednesday");
 //        map.put(0, new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()));
 //
 //
@@ -73,7 +73,10 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
     public void onBindViewHolder(@NonNull WeatherViewHolder holder, int position) {
         Daily current = dailies.get(position);
         int index = today + position;
-        if (index>=8){
+        if (index ==today){
+            holder.time.setText(":\t"  +map.get(index) + " (today)");
+        }
+        else if (index>=8){
             holder.time.setText(String.format(":\t"  +"Next %s" , map.get(index-7)));
         }else {
             holder.time.setText(":\t"  +map.get(index));

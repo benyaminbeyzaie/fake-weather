@@ -50,7 +50,7 @@ public class Home extends Fragment {
     WeatherAdaptor weatherAdaptor;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
-    boolean isByCity = true;
+    boolean isByCity = false;
     CardView currentState;
     CardView currentWeather;
 
@@ -169,13 +169,12 @@ public class Home extends Fragment {
         weatherAdaptor = new WeatherAdaptor();
         recyclerView.setAdapter(weatherAdaptor);
 
-        weatherViewModel.refresh(51.5072, 0.1276);
-
-
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isByCity) {
+                    Functions.toast(getContext() , " City Name");
+
                     String inputCity = cityName.getText().toString();
 
                     try {

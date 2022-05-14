@@ -79,16 +79,32 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
             holder.time.setText(":\t"  +map.get(index));
         }
 
-        holder.humidity.setText(":\t"  +current.getHumidity() + "");
-//        holder.maxtemp.setText(":\t"  +current.getTemp().getMax() + "");
-//        holder.mintemp.setText(":\t"  +current.getTemp().getMin() + "");
+        String humidity = current.getHumidity() == null ? "-" : current.getHumidity().toString();
+        String max = "-";
+        String min = "-";
+
+        if (current.getTemp() != null) {
+            max = current.getTemp().getMax() == null ? "-" : current.getTemp().getMax().toString();
+            min = current.getTemp().getMax() == null ? "-" : current.getTemp().getMin().toString();
+        }
+
+
+        holder.humidity.setText(":\t" + humidity + "");
+        holder.maxtemp.setText(":\t" + max + "");
+        holder.mintemp.setText(":\t"  + min + "");
 //        holder.wind.setText(current.getWindSpeed()+"");
 //        holder.pressure.setText(current.getPressure()+"");
-        String iconCode = current.getWeather().get(0).getIcon();
+        String iconCode = "-";
+        String description = "-";
+
+        if (current.getWeather() != null && current.getWeather().size() > 0) {
+            iconCode = current.getWeather().get(0).getIcon();
+            description = current.getWeather().get(0).getDescription();
+        }
 //        String iconCode = response.body().getCurrent().getWeather().get(0).getIcon();
         Picasso.get().load("https://openweathermap.org/img/wn/" + iconCode + "@2x.png").
                 placeholder(R.drawable.ic_launcher_background).into(holder.imageView);
-        holder.status.setText(current.getWeather().get(0).getDescription());
+        holder.status.setText(description);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -129,12 +129,12 @@ public class Home extends Fragment {
         weatherAdaptor = new WeatherAdaptor();
         recyclerView.setAdapter(weatherAdaptor);
 
-        openWeatherMapLiveData.observe(getActivity(), new Observer<OpenWeatherMap>() {
-            @Override
-            public void onChanged(OpenWeatherMap openWeatherMap) {
-                weatherAdaptor.setDailies(openWeatherMap.getDaily());
-            }
-        });
+//        openWeatherMapLiveData.observe(getActivity(), new Observer<OpenWeatherMap>() {
+//            @Override
+//            public void onChanged(OpenWeatherMap openWeatherMap) {
+//                weatherAdaptor.setDailies(openWeatherMap.getDaily());
+//            }
+//        });
         weatherViewModel.refresh(51.5072, 0.1276);
 
 
@@ -146,7 +146,7 @@ public class Home extends Fragment {
 
                     try {
 //                        LiveData<OpenWeatherMap> openWeatherMapLiveData = weatherViewModel.getOpenWeatherMapLiveData();
-                        weatherAdaptor.clear();
+                        // weatherAdaptor.clear();
                         weatherViewModel.refresh(inputCity);
                         List<Daily> daily = openWeatherMapLiveData.getValue().getDaily();
                     }catch (Exception e){
@@ -157,7 +157,7 @@ public class Home extends Fragment {
                     String lonStr = lonEdit.getText().toString();
 
                     try {
-                        weatherAdaptor.clear();
+                        //weatherAdaptor.clear();
                         weatherViewModel.refresh(Double.parseDouble(latStr) , Double.parseDouble(lonStr));
                     }catch (Exception e){
                         Functions.toast(getContext() , "Invalid Lat or Lon");
@@ -175,12 +175,9 @@ public class Home extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         weatherViewModel.getOpenWeatherMapLiveData()
                 .observe(getViewLifecycleOwner() , openWeatherMap -> {
-                    Log.i("Asgfagagsa", "onViewCreated: " + openWeatherMap.toString());
-                    weatherAdaptor.setDailies(openWeatherMap.getDaily());
+                    weatherAdaptor.setDailies(openWeatherMap.getDaily().subList(1, openWeatherMap.getDaily().size()));
                 });
 
         weatherViewModel.getMessage()

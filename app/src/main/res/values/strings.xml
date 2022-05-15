@@ -8,6 +8,7 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="preference_file_key">preference_file_key</string>
     <string name="is_dark">is_dark</string>
+    <string name="is_hide">is_hide</string>
     <string name="time_string">Time</string>
     <string name="max_temp">Max. Temp.</string>
     <string name="min_temp">Min. Temp.</string>
@@ -21,4 +22,13 @@
     <string name="location">Location</string>
     <string name="current_weather">Current Weather</string>
     <string name="daily_weather">Daily Weather</string>
+    <string name="get_time">get_time</string>
+    <string name="get_maxtemp">get_max_temp</string>
+    <string name="get_mintemp">get_min_temp</string>
+    <string name="get_humidity">get_humidity</string>
+    <string name="get_pressure">get_pressure</string>
+    <string name="get_icon">get_icon</string>
+    <string name="get_status">get_status</string>
+    <string name="get_wind">get_wind</string>
+    <string name="get_wind_dir">get_wind_dir</string>
 </resources>

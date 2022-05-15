@@ -80,8 +80,10 @@
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_marginTop="10px"
+                    android:backgroundTint="@color/imageButtonColor"
                     android:text="Search"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:iconTint="@color/imageButtonText" />
 
 
             </LinearLayout>
@@ -103,12 +105,38 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/current_weather"
-                    android:textSize="24sp" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/current_weather"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/current_expandable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:backgroundTint="@color/imageButtonColor"
+                        android:src="@drawable/ic_baseline_expand_more_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:tint="@color/imageButtonText"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView_current"
@@ -126,7 +154,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="170dp">
+                        android:layout_height="190dp">
 
 
                         <ImageView
@@ -152,9 +180,8 @@
                             app:layout_constraintTop_toBottomOf="@+id/imageView_current" />
 
                         <LinearLayout
-                            android:layout_width="214dp"
-                            android:layout_height="0dp"
-                            android:layout_marginEnd="25dp"
+                            android:layout_width="238dp"
+                            android:layout_height="202dp"
                             android:layout_marginBottom="1dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
@@ -219,7 +246,7 @@
 
                                 <TextView
                                     android:id="@+id/time_id_current"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/default_value" />
 

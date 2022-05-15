@@ -66,4 +66,7 @@
 
     <color name="dark_back">#191E3A</color>
     <color name="dark_back2">#0F1222</color>
+
+    <color name="imageButtonColor">#00B0FF</color>
+    <color name="imageButtonText">#2F1F4D</color>
 </resources>

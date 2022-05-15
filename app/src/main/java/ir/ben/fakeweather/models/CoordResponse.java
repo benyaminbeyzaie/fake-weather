@@ -32,6 +32,9 @@ public class CoordResponse {
     @Ignore
     private CoordModel coord;
 
+    @ColumnInfo(name = "saved_at")
+    public long savedAt = 0;
+
     public Double getLat() {
         return lat;
     }
@@ -70,6 +73,14 @@ public class CoordResponse {
 
     public void setCoord(CoordModel coord) {
         this.coord = coord;
+    }
+
+    public long getSavedAt() {
+        return savedAt;
+    }
+
+    public void setSavedAt(long savedAt) {
+        this.savedAt = savedAt;
     }
 
     @Override

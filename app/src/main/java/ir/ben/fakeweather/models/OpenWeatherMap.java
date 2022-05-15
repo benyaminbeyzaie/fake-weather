@@ -50,7 +50,8 @@ public class OpenWeatherMap {
     @Expose
     private List<Daily> daily = null;
 
-    public long saved_at = 0;
+    @ColumnInfo(name = "saved_at")
+    public long savedAt = 0;
 
     public long getId() {
         return id;
@@ -108,6 +109,14 @@ public class OpenWeatherMap {
         this.daily = daily;
     }
 
+    public long getSavedAt() {
+        return savedAt;
+    }
+
+    public void setSavedAt(long savedAt) {
+        this.savedAt = savedAt;
+    }
+
     @Override
     public String toString() {
         return "OpenWeatherMap{" +
@@ -118,7 +127,7 @@ public class OpenWeatherMap {
                 ", timezoneOffset=" + timezoneOffset +
                 ", current=" + current +
                 ", daily=" + daily +
-                ", saved_at=" + saved_at +
+                ", saved_at=" + savedAt +
                 '}';
     }
 }

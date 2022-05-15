@@ -16,11 +16,11 @@ public interface OpenWeatherMapDao {
     @Query("SELECT * FROM open_weather_map WHERE lat LIKE :lat AND lon LIKE :lon")
     OpenWeatherMap getOpenWeatherMapWithLatLong(double lat, double lon);
 
+    @Query("delete FROM open_weather_map WHERE lat LIKE :lat AND lon LIKE :lon")
+    void delete(double lat, double lon);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(OpenWeatherMap openWeatherMap);
-
-    @Delete
-    void delete(OpenWeatherMap openWeatherMap);
 
     @Query("delete from open_weather_map")
     void deleteAll();

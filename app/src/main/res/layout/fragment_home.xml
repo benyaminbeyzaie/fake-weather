@@ -135,7 +135,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0"
                         app:tint="@color/imageButtonText"
                         tools:ignore="SpeakableTextPresentCheck" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -334,7 +333,8 @@
                     android:layout_height="match_parent"
                     tools:listitem="@layout/weather_design"
                     android:padding="16dp"
-                    android:clipToPadding="false"/>
+                    android:clipToPadding="false"
+                    />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

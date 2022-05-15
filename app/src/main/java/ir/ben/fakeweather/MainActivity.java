@@ -81,8 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         fragmentTransaction.addToBackStack("null1");
                         fragmentTransaction.commit();
                         Log.d("Main", "Clicked on setting");
-                    }
-                    else if (uiStateViewModel.getSelectedPage().getValue() == null || !uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.setting)) {
+                    } else if (uiStateViewModel.getSelectedPage().getValue() == null || !uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.setting)) {
                         uiStateViewModel.changePage(SelectedPage.setting);
                         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.setCustomAnimations(
@@ -96,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         Log.d("Main", "Clicked on setting");
                     }
-
 
 
                     return true;
@@ -132,15 +130,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d("Main" , uiStateViewModel.getSelectedPage().getValue()+"");
+        Log.d("Main", uiStateViewModel.getSelectedPage().getValue() + "");
 //        super.onBackPressed();
-        if(uiStateViewModel.getSelectedPage().getValue()!=null && uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.show_weather)){
+        if (uiStateViewModel.getSelectedPage().getValue() != null && uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.show_weather)) {
             uiStateViewModel.changePage(SelectedPage.home);
             super.onBackPressed();
-        }else if (uiStateViewModel.getSelectedPage().getValue()!=null && uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.setting)){
+        } else if (uiStateViewModel.getSelectedPage().getValue() != null && uiStateViewModel.getSelectedPage().getValue().equals(SelectedPage.setting)) {
             uiStateViewModel.changePage(SelectedPage.home);
             super.onBackPressed();
-        }else {
+        } else {
             super.onBackPressed();
         }
     }

@@ -54,7 +54,8 @@
                     android:layout_marginRight="18dp"
                     android:visibility="gone"
                     android:hint="City Name"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:imeOptions="actionDone"/>
 
                 <EditText
                     android:id="@+id/lat"
@@ -74,7 +75,8 @@
                     android:layout_marginRight="18dp"
                     android:visibility="gone"
                     android:hint="LON"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"/>
 
                 <Button
                     android:id="@+id/search_button"

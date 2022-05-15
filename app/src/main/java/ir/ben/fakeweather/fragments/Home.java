@@ -12,9 +12,11 @@ import android.text.TextWatcher;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +27,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -39,9 +40,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
 
-import ir.ben.fakeweather.MainActivity;
 import ir.ben.fakeweather.R;
 import ir.ben.fakeweather.models.Daily;
 import ir.ben.fakeweather.models.OpenWeatherMap;
@@ -74,12 +73,9 @@ public class Home extends Fragment {
 
     private CountDownTimer mCountDownTimer;
 
-    private boolean mTimerRunning, isSent=false;
+    private boolean mTimerRunning, isSent = false;
     private static final long START_TIME_IN_MILLIS = 5000;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
-
-    private String cityNameString , LatString , LonString;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,8 +86,6 @@ public class Home extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
         openWeatherMapLiveData = weatherViewModel.getOpenWeatherMapLiveData();
-
-
 
 
         currentTime = view.findViewById(R.id.time_id_current);
@@ -129,9 +123,7 @@ public class Home extends Fragment {
         Log.d("Main", "on create");
 
 
-        currentExpand.setOnClickListener(view1 -> {
-            expandAction();
-        });
+        currentExpand.setOnClickListener(view1 -> expandAction());
 
 
         recyclerView = view.findViewById(R.id.recycler);
@@ -144,9 +136,8 @@ public class Home extends Fragment {
 //                stopTimer();
                 searchAction();
                 isSent = true;
-            }else {
+            } else {
                 g(getContext());
-
             }
         });
 
@@ -160,25 +151,49 @@ public class Home extends Fragment {
         new MaterialAlertDialogBuilder(context)
                 .setTitle("Title")
                 .setMessage(R.string.confirm_massege)
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        stopTimer();
-                        searchAction();
-                        isSent = true;
-                    }
+                .setPositiveButton("ok", (dialogInterface, i) -> {
+                    stopTimer();
+                    searchAction();
+                    isSent = true;
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                .setNegativeButton("Cancel", (dialogInterface, i) -> {
 
-                    }
                 })
                 .show();
 
     }
 
     private void runChangeListeners() {
+        cityName.setOnEditorActionListener((textView, i, keyEvent) -> {
+            boolean handled = false;
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                if (!isSent) {
+                    stopTimer();
+                    searchAction();
+                    isSent = true;
+                } else {
+                    g(getContext());
+                }
+                handled = true;
+            }
+            return handled;
+        });
+
+        lonEdit.setOnEditorActionListener((textView, i, keyEvent) -> {
+            boolean handled = false;
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                if (!isSent) {
+                    stopTimer();
+                    searchAction();
+                    isSent = true;
+                } else {
+                    g(getContext());
+                }
+                handled = true;
+            }
+            return handled;
+        });
+
         cityName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -192,9 +207,9 @@ public class Home extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable==null || editable.toString().equals("")){
+                if (editable == null || editable.toString().equals("")) {
                     stopTimer();
-                }else {
+                } else {
                     stopTimer();
                     runCityTimer();
                     isSent = false;
@@ -216,9 +231,9 @@ public class Home extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable==null || editable.toString().equals("") || lonEdit.getText() == null || lonEdit.getText().toString().equals("")){
+                if (editable == null || editable.toString().equals("") || lonEdit.getText() == null || lonEdit.getText().toString().equals("")) {
                     stopTimer();
-                }else {
+                } else {
                     stopTimer();
                     locationTimer();
                     isSent = false;
@@ -239,9 +254,9 @@ public class Home extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable==null || editable.toString().equals("") || latEdit.getText() == null || latEdit.getText().toString().equals("")){
+                if (editable == null || editable.toString().equals("") || latEdit.getText() == null || latEdit.getText().toString().equals("")) {
                     stopTimer();
-                }else {
+                } else {
                     stopTimer();
                     locationTimer();
                     isSent = false;
@@ -251,19 +266,19 @@ public class Home extends Fragment {
 
     }
 
-    public void runCityTimer(){
-        Log.d("Timer" , "City Timer has started.");
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis , 500) {
+    public void runCityTimer() {
+        Log.d("Timer", "City Timer has started.");
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
             @Override
             public void onTick(long l) {
                 mTimeLeftInMillis = l;
-                Log.d("Timer" , "time left: " + mTimeLeftInMillis+"");
+                Log.d("Timer", "time left: " + mTimeLeftInMillis + "");
                 mTimerRunning = true;
             }
 
             @Override
             public void onFinish() {
-                if (!isSent){
+                if (!isSent) {
                     isSent = true;
                     searchAction();
                     mTimerRunning = false;
@@ -274,20 +289,20 @@ public class Home extends Fragment {
     }
 
 
-    public void locationTimer(){
-        Log.d("Timer" , "City Timer has started.");
+    public void locationTimer() {
+        Log.d("Timer", "City Timer has started.");
         mTimeLeftInMillis = START_TIME_IN_MILLIS;
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis , 500) {
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
             @Override
             public void onTick(long l) {
                 mTimeLeftInMillis = l;
-                Log.d("Timer" , "time left: " + mTimeLeftInMillis+"");
+                Log.d("Timer", "time left: " + mTimeLeftInMillis + "");
                 mTimerRunning = true;
             }
 
             @Override
             public void onFinish() {
-                if (!isSent){
+                if (!isSent) {
                     isSent = true;
                     searchAction();
                     mTimerRunning = false;
@@ -296,20 +311,21 @@ public class Home extends Fragment {
             }
         }.start();
     }
-    public void stopTimer(){
-        if (mCountDownTimer == null){
+
+    public void stopTimer() {
+        if (mCountDownTimer == null) {
             mTimerRunning = false;
-        }else {
-            Log.d("Timer" , "Timer has stopped.");
+        } else {
+            Log.d("Timer", "Timer has stopped.");
             mCountDownTimer.cancel();
             mTimerRunning = false;
             mTimeLeftInMillis = START_TIME_IN_MILLIS;
-            isSent=false;
+            isSent = false;
         }
     }
 
 
-    public void radioAction(RadioGroup group, int checkedId){
+    public void radioAction(RadioGroup group, int checkedId) {
         View radioButton = radio.findViewById(checkedId);
         int index = radio.indexOfChild(radioButton);
 
@@ -335,24 +351,24 @@ public class Home extends Fragment {
     }
 
 
-    public void expandAction(){
+    public void expandAction() {
         if (currentWeather.getVisibility() == View.VISIBLE) {
 
             TransitionManager.beginDelayedTransition(currentState,
                     new AutoTransition());
             currentWeather.setVisibility(View.GONE);
             currentExpand.setImageResource(R.drawable.ic_baseline_expand_more_24);
-            sharedPref.edit().putBoolean(getString(R.string.is_hide) , true).apply();
+            sharedPref.edit().putBoolean(getString(R.string.is_hide), true).apply();
         } else {
             TransitionManager.beginDelayedTransition(currentState,
                     new AutoTransition());
             currentWeather.setVisibility(View.VISIBLE);
             currentExpand.setImageResource(R.drawable.ic_baseline_expand_less_24);
-            sharedPref.edit().putBoolean(getString(R.string.is_hide) , false).apply();
+            sharedPref.edit().putBoolean(getString(R.string.is_hide), false).apply();
         }
     }
 
-    public void searchAction(){
+    public void searchAction() {
         if (isByCity) {
             Functions.toast(getContext(), " City Name");
             String inputCity = cityName.getText().toString();
@@ -383,7 +399,7 @@ public class Home extends Fragment {
                     if (openWeatherMap != null) {
                         weatherAdaptor.setDailies(openWeatherMap.getDaily());
                         changeCurrentWeatherStatus(openWeatherMap);
-                    }else {
+                    } else {
                         weatherAdaptor.setDailies(new ArrayList<>());
                         changeCurrentWeatherStatus(null);
                     }
@@ -395,7 +411,7 @@ public class Home extends Fragment {
 
 
     public void changeCurrentWeatherStatus(OpenWeatherMap openWeatherMap) {
-        if (openWeatherMap!=null) {
+        if (openWeatherMap != null) {
             Daily current = openWeatherMap.getCurrent();
             currentTemp.setText(":\t".concat(current.getTemp().getMax() + ""));
             currentPresure.setText(":\t".concat(current.getPressure() + ""));
@@ -409,7 +425,7 @@ public class Home extends Fragment {
 
             currentTime.setText(":\t".concat(convertTime(current.getDt())));
             currentLocation.setText(":\t".concat(openWeatherMap.getLat() + "| " + openWeatherMap.getLon()));
-        }else {
+        } else {
             currentTemp.setText(getString(R.string.default_value));
             currentPresure.setText(getString(R.string.default_value));
             currentWindDirection.setText(getString(R.string.default_value));

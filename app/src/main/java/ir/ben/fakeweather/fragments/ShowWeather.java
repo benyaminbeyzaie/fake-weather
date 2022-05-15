@@ -1,20 +1,15 @@
 package ir.ben.fakeweather.fragments;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
 
@@ -25,14 +20,14 @@ import ir.ben.fakeweather.models.Daily;
 public class ShowWeather extends Fragment {
 
     private Daily current;
-    private String time , icon , hu , mxt , mit , win , windir , pres , stat ;
+    private String time, icon, hu, mxt, mit, win, windir, pres, stat;
     private ImageView imageView;
     private TextView timeView;
-    private  TextView humidity;
-    private  TextView maxtemp;
-    private  TextView mintemp;
-    private  TextView wind;
-    private  TextView pressure;
+    private TextView humidity;
+    private TextView maxtemp;
+    private TextView mintemp;
+    private TextView wind;
+    private TextView pressure;
     private TextView status;
     private TextView windDegree;
 
@@ -46,7 +41,7 @@ public class ShowWeather extends Fragment {
     }
 
 
-    public ShowWeather(Daily daily , String time) {
+    public ShowWeather(Daily daily, String time) {
         this.current = daily;
         this.time = time;
     }
@@ -56,7 +51,7 @@ public class ShowWeather extends Fragment {
                              Bundle savedInstanceState) {
 //        sharedPref = getContext().getSharedPreferences("Weather", MODE_PRIVATE);
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_show_weather, container, false);
+        View view = inflater.inflate(R.layout.fragment_show_weather, container, false);
         imageView = view.findViewById(R.id.imageView_icon_show);
         timeView = view.findViewById(R.id.time_id_show);
         humidity = view.findViewById(R.id.humidity_id_show);
@@ -67,9 +62,9 @@ public class ShowWeather extends Fragment {
         status = view.findViewById(R.id.status_id_show);
         windDegree = view.findViewById(R.id.wind_deg_id_show);
 
-        if (current!=null) {
+        if (current != null) {
 
-            hu = current.getHumidity()+"";
+            hu = current.getHumidity() + "";
             mxt = current.getTemp().getMax() + "";
             mit = current.getTemp().getMin() + "";
             win = current.getWindSpeed() + "";
@@ -88,7 +83,6 @@ public class ShowWeather extends Fragment {
             pressure.setText(":\t".concat(pres));
 
 
-//        String iconCode = response.body().getCurrent().getWeather().get(0).getIcon();
             Picasso.get().load("https://openweathermap.org/img/wn/" + icon + "@2x.png").
                     placeholder(R.drawable.ic_launcher_background).into(imageView);
             status.setText(stat);
@@ -126,7 +120,7 @@ public class ShowWeather extends Fragment {
 
     @Override
     public void onPause() {
-        Log.d("show" , " paused");
+        Log.d("show", " paused");
 
 //        sharedPref.edit().putString(getString(R.string.get_time) , time).apply();
 //        sharedPref.edit().putString(getString(R.string.get_humidity) , hu).apply();
@@ -144,13 +138,13 @@ public class ShowWeather extends Fragment {
 
     @Override
     public void onStop() {
-        Log.d("show" , " stopped");
+        Log.d("show", " stopped");
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-        Log.d("show" , " destroy");
+        Log.d("show", " destroy");
         super.onDestroy();
     }
 }

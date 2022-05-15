@@ -5,15 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,8 +27,8 @@ import ir.ben.fakeweather.models.Daily;
 
 public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherViewHolder> {
 
-    private HashMap<Integer, String> map = new HashMap<>();
-    private HashMap<String, Integer> map2 = new HashMap<>();
+    private final HashMap<Integer, String> map = new HashMap<>();
+    private final HashMap<String, Integer> map2 = new HashMap<>();
 
     private List<Daily> dailies = new ArrayList<>();
     int today;
@@ -56,16 +53,6 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
         Date date = calendar.getTime();
         String tod = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
         today = map2.get(tod);
-//        today = map2.get("Wednesday");
-//        map.put(0, new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()));
-//
-//
-//        map.put(1, "Tommorow");
-//        for (int i = 2; i <= 7; i++) {
-//            map.put(i, i + " days later");
-//        }
-//        map.put(2 , "3 days later");
-
         return new WeatherViewHolder(view);
     }
 
@@ -73,13 +60,12 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
     public void onBindViewHolder(@NonNull WeatherViewHolder holder, int position) {
         Daily current = dailies.get(position);
         int index = today + position;
-        if (index ==today){
-            holder.time.setText(":\t"  +map.get(index) + " (today)");
-        }
-        else if (index>=8){
-            holder.time.setText(String.format(":\t"  +"Next %s" , map.get(index-7)));
-        }else {
-            holder.time.setText(":\t"  +map.get(index));
+        if (index == today) {
+            holder.time.setText(":\t".concat(map.get(index) + " (today)"));
+        } else if (index >= 8) {
+            holder.time.setText(String.format(":\t" + "Next %s", map.get(index - 7)));
+        } else {
+            holder.time.setText(":\t".concat(map.get(index)));
         }
 
         String humidity = current.getHumidity() == null ? "-" : current.getHumidity().toString();
@@ -92,11 +78,9 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
         }
 
 
-        holder.humidity.setText(":\t" + humidity + "");
-        holder.maxtemp.setText(":\t" + max + "");
-        holder.mintemp.setText(":\t"  + min + "");
-//        holder.wind.setText(current.getWindSpeed()+"");
-//        holder.pressure.setText(current.getPressure()+"");
+        holder.humidity.setText(":\t".concat(humidity + ""));
+        holder.maxtemp.setText(":\t".concat(max + ""));
+        holder.mintemp.setText(":\t".concat(min + ""));
         String iconCode = "-";
         String description = "-";
 
@@ -104,23 +88,15 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
             iconCode = current.getWeather().get(0).getIcon();
             description = current.getWeather().get(0).getDescription();
         }
-//        String iconCode = response.body().getCurrent().getWeather().get(0).getIcon();
         Picasso.get().load("https://openweathermap.org/img/wn/" + iconCode + "@2x.png").
                 placeholder(R.drawable.ic_launcher_background).into(holder.imageView);
         holder.status.setText(description);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(), "CLICKED", Toast.LENGTH_SHORT).show();
-                if (index>=8){
-                    ((MainActivity) view.getContext()).showMore(current , String.format("Next %s" , map.get(index-7)));
-//                    holder.time.setText(String.format("Next %s" , map.get(index-7)));
-                }else {
-                    ((MainActivity) view.getContext()).showMore(current , map.get(index));
-//                    holder.time.setText(map.get(index));
-                }
+        holder.cardView.setOnClickListener(view -> {
 
-
+            if (index >= 8) {
+                ((MainActivity) view.getContext()).showMore(current, String.format("Next %s", map.get(index - 7)));
+            } else {
+                ((MainActivity) view.getContext()).showMore(current, map.get(index));
             }
         });
 
@@ -143,20 +119,18 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
     public void clear() {
         int size = getItemCount();
         dailies.clear();
-        notifyItemRangeRemoved(0 , size);
+        notifyItemRangeRemoved(0, size);
     }
 
 
     public class WeatherViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imageView;
-        private TextView time;
-        private TextView humidity;
-        private TextView maxtemp;
-        private TextView mintemp;
-        //        private  TextView wind;
-//        private  TextView pressure;
-        private TextView status;
+        private final ImageView imageView;
+        private final TextView time;
+        private final TextView humidity;
+        private final TextView maxtemp;
+        private final TextView mintemp;
+        private final TextView status;
         private final CardView cardView;
 
         public WeatherViewHolder(@NonNull View itemView) {
@@ -166,8 +140,6 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
             humidity = itemView.findViewById(R.id.humidity_id);
             maxtemp = itemView.findViewById(R.id.maxtemp_id);
             mintemp = itemView.findViewById(R.id.mintemp_id);
-//            wind = itemView.findViewById(R.id.wind_id);
-//            pressure = itemView.findViewById(R.id.pressure_id);
             status = itemView.findViewById(R.id.status_id);
             cardView = itemView.findViewById(R.id.cardView);
         }

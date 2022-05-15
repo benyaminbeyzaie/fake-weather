@@ -31,4 +31,5 @@
     <string name="get_status">get_status</string>
     <string name="get_wind">get_wind</string>
     <string name="get_wind_dir">get_wind_dir</string>
+    <string name="confirm_massege">new informations has just received. Do you want to do it again?</string>
 </resources>

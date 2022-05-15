@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import ir.ben.fakeweather.database.AppDatabase;
@@ -23,7 +25,7 @@ public class WeatherRepository {
     private final MutableLiveData<String> message;
     private final MutableLiveData<OpenWeatherMap> openWeatherMap;
 
-    private static final long CACHE_TIME = (12 * 60 * 60 * 100);
+    private static final long CACHE_TIME = (12 * 60 * 60 * 1000);
 
     public WeatherRepository(Application application) {
         db = AppDatabase.getDatabase(application);
@@ -147,12 +149,14 @@ public class WeatherRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             OpenWeatherMap result = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon);
             if (result == null) {
+                openWeatherMap.postValue(null);
                 message.postValue("Cache is null!");
                 return;
             }
             if (System.currentTimeMillis() - result.savedAt > CACHE_TIME) {
                 message.postValue("Cache is expired!");
                 deleteOpenWeatherMap(result);
+                openWeatherMap.postValue(null);
                 return;
             }
             Daily current = db.dailyDao().getWithFk(result.getId()).get(0);
@@ -160,7 +164,7 @@ public class WeatherRepository {
             current.setTemp(db.tempDao().getTemp(current.getId()));
             result.setCurrent(current);
 
-            List<Daily> dailies = db.dailyDao().getWithFk(result.getId()).subList(1, db.dailyDao().getWithFk(result.getId()).size() - 1);
+            List<Daily> dailies = db.dailyDao().getWithFk(result.getId()).subList(1, db.dailyDao().getWithFk(result.getId()).size());
             for (int i = 0; i < dailies.size(); i++) {
                 Daily daily = dailies.get(i);
                 daily.setWeather(db.weatherDao().get(daily.getId()));

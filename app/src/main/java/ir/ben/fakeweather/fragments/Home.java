@@ -2,8 +2,13 @@ package ir.ben.fakeweather.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.util.Log;
@@ -28,11 +33,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
 
+import ir.ben.fakeweather.MainActivity;
 import ir.ben.fakeweather.R;
 import ir.ben.fakeweather.models.Daily;
 import ir.ben.fakeweather.models.OpenWeatherMap;
@@ -63,6 +72,14 @@ public class Home extends Fragment {
     private WeatherViewModel weatherViewModel;
     LiveData<OpenWeatherMap> openWeatherMapLiveData;
 
+    private CountDownTimer mCountDownTimer;
+
+    private boolean mTimerRunning, isSent=false;
+    private static final long START_TIME_IN_MILLIS = 5000;
+    private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
+
+    private String cityNameString , LatString , LonString;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,12 +90,6 @@ public class Home extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
         openWeatherMapLiveData = weatherViewModel.getOpenWeatherMapLiveData();
-
-
-
-
-
-
 
 
 
@@ -102,29 +113,8 @@ public class Home extends Fragment {
 
         searchButton = view.findViewById(R.id.search_button);
 
-        radio.setOnCheckedChangeListener((group, checkedId) -> {
+        radio.setOnCheckedChangeListener(this::radioAction);
 
-            View radioButton = radio.findViewById(checkedId);
-            int index = radio.indexOfChild(radioButton);
-
-            switch (index) {
-                case 0:
-                    cityName.setVisibility(View.VISIBLE);
-                    searchButton.setVisibility(View.VISIBLE);
-                    latEdit.setVisibility(View.INVISIBLE);
-                    lonEdit.setVisibility(View.INVISIBLE);
-                    isByCity = true;
-                    break;
-                case 1: // secondbutton
-
-                    latEdit.setVisibility(View.VISIBLE);
-                    lonEdit.setVisibility(View.VISIBLE);
-                    searchButton.setVisibility(View.VISIBLE);
-                    cityName.setVisibility(View.INVISIBLE);
-                    isByCity = false;
-                    break;
-            }
-        });
 
         currentState = view.findViewById(R.id.current_card_view);
         currentWeather = view.findViewById(R.id.cardView_current);
@@ -140,23 +130,8 @@ public class Home extends Fragment {
 
 
         currentExpand.setOnClickListener(view1 -> {
-            if (currentWeather.getVisibility() == View.VISIBLE) {
-
-                TransitionManager.beginDelayedTransition(currentState,
-                        new AutoTransition());
-                currentWeather.setVisibility(View.GONE);
-                currentExpand.setImageResource(R.drawable.ic_baseline_expand_more_24);
-                sharedPref.edit().putBoolean(getString(R.string.is_hide) , true).apply();
-            } else {
-                TransitionManager.beginDelayedTransition(currentState,
-                        new AutoTransition());
-                currentWeather.setVisibility(View.VISIBLE);
-                currentExpand.setImageResource(R.drawable.ic_baseline_expand_less_24);
-                sharedPref.edit().putBoolean(getString(R.string.is_hide) , false).apply();
-            }
+            expandAction();
         });
-
-
 
 
         recyclerView = view.findViewById(R.id.recycler);
@@ -165,30 +140,239 @@ public class Home extends Fragment {
         recyclerView.setAdapter(weatherAdaptor);
 
         searchButton.setOnClickListener(v -> {
-            if (isByCity) {
-                Functions.toast(getContext(), " City Name");
-                String inputCity = cityName.getText().toString();
-                try {
-                    weatherViewModel.refresh(inputCity);
-                } catch (Exception e) {
-                    Functions.toast(getContext(), "Invalid City Name");
-                }
-            } else {
-                String latStr = latEdit.getText().toString();
-                String lonStr = lonEdit.getText().toString();
-                try {
-                    weatherViewModel.refresh(Double.parseDouble(latStr), Double.parseDouble(lonStr));
-                } catch (Exception e) {
-                    Functions.toast(getContext(), "Invalid Lat or Lon");
-                }
+            if (!isSent) {
+//                stopTimer();
+                searchAction();
+                isSent = true;
+            }else {
+                g(getContext());
+
             }
-            hideKeyboard();
         });
 
+        runChangeListeners();
 
         return view;
     }
 
+    private void g(Context context) {
+
+        new MaterialAlertDialogBuilder(context)
+                .setTitle("Title")
+                .setMessage(R.string.confirm_massege)
+                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        stopTimer();
+                        searchAction();
+                        isSent = true;
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+
+    }
+
+    private void runChangeListeners() {
+        cityName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable==null || editable.toString().equals("")){
+                    stopTimer();
+                }else {
+                    stopTimer();
+                    runCityTimer();
+                    isSent = false;
+                }
+            }
+        });
+
+
+        latEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable==null || editable.toString().equals("") || lonEdit.getText() == null || lonEdit.getText().toString().equals("")){
+                    stopTimer();
+                }else {
+                    stopTimer();
+                    locationTimer();
+                    isSent = false;
+                }
+            }
+        });
+
+        lonEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable==null || editable.toString().equals("") || latEdit.getText() == null || latEdit.getText().toString().equals("")){
+                    stopTimer();
+                }else {
+                    stopTimer();
+                    locationTimer();
+                    isSent = false;
+                }
+            }
+        });
+
+    }
+
+    public void runCityTimer(){
+        Log.d("Timer" , "City Timer has started.");
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis , 500) {
+            @Override
+            public void onTick(long l) {
+                mTimeLeftInMillis = l;
+                Log.d("Timer" , "time left: " + mTimeLeftInMillis+"");
+                mTimerRunning = true;
+            }
+
+            @Override
+            public void onFinish() {
+                if (!isSent){
+                    isSent = true;
+                    searchAction();
+                    mTimerRunning = false;
+                    mTimeLeftInMillis = START_TIME_IN_MILLIS;
+                }
+            }
+        }.start();
+    }
+
+
+    public void locationTimer(){
+        Log.d("Timer" , "City Timer has started.");
+        mTimeLeftInMillis = START_TIME_IN_MILLIS;
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis , 500) {
+            @Override
+            public void onTick(long l) {
+                mTimeLeftInMillis = l;
+                Log.d("Timer" , "time left: " + mTimeLeftInMillis+"");
+                mTimerRunning = true;
+            }
+
+            @Override
+            public void onFinish() {
+                if (!isSent){
+                    isSent = true;
+                    searchAction();
+                    mTimerRunning = false;
+                    mTimeLeftInMillis = START_TIME_IN_MILLIS;
+                }
+            }
+        }.start();
+    }
+    public void stopTimer(){
+        if (mCountDownTimer == null){
+            mTimerRunning = false;
+        }else {
+            Log.d("Timer" , "Timer has stopped.");
+            mCountDownTimer.cancel();
+            mTimerRunning = false;
+            mTimeLeftInMillis = START_TIME_IN_MILLIS;
+            isSent=false;
+        }
+    }
+
+
+    public void radioAction(RadioGroup group, int checkedId){
+        View radioButton = radio.findViewById(checkedId);
+        int index = radio.indexOfChild(radioButton);
+
+        switch (index) {
+            case 0:
+                cityName.setVisibility(View.VISIBLE);
+                searchButton.setVisibility(View.VISIBLE);
+                latEdit.setVisibility(View.INVISIBLE);
+                lonEdit.setVisibility(View.INVISIBLE);
+                isByCity = true;
+                stopTimer();
+                break;
+            case 1: // secondbutton
+
+                latEdit.setVisibility(View.VISIBLE);
+                lonEdit.setVisibility(View.VISIBLE);
+                searchButton.setVisibility(View.VISIBLE);
+                cityName.setVisibility(View.INVISIBLE);
+                isByCity = false;
+                stopTimer();
+                break;
+        }
+    }
+
+
+    public void expandAction(){
+        if (currentWeather.getVisibility() == View.VISIBLE) {
+
+            TransitionManager.beginDelayedTransition(currentState,
+                    new AutoTransition());
+            currentWeather.setVisibility(View.GONE);
+            currentExpand.setImageResource(R.drawable.ic_baseline_expand_more_24);
+            sharedPref.edit().putBoolean(getString(R.string.is_hide) , true).apply();
+        } else {
+            TransitionManager.beginDelayedTransition(currentState,
+                    new AutoTransition());
+            currentWeather.setVisibility(View.VISIBLE);
+            currentExpand.setImageResource(R.drawable.ic_baseline_expand_less_24);
+            sharedPref.edit().putBoolean(getString(R.string.is_hide) , false).apply();
+        }
+    }
+
+    public void searchAction(){
+        if (isByCity) {
+            Functions.toast(getContext(), " City Name");
+            String inputCity = cityName.getText().toString();
+            try {
+                weatherViewModel.refresh(inputCity);
+            } catch (Exception e) {
+                Functions.toast(getContext(), "Invalid City Name");
+            }
+        } else {
+            String latStr = latEdit.getText().toString();
+            String lonStr = lonEdit.getText().toString();
+            try {
+                weatherViewModel.refresh(Double.parseDouble(latStr), Double.parseDouble(lonStr));
+            } catch (Exception e) {
+                Functions.toast(getContext(), "Invalid Lat or Lon");
+            }
+        }
+
+        hideKeyboard();
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -196,8 +380,13 @@ public class Home extends Fragment {
 
         weatherViewModel.getOpenWeatherMapLiveData()
                 .observe(getViewLifecycleOwner(), openWeatherMap -> {
-                    weatherAdaptor.setDailies(openWeatherMap.getDaily().subList(1, openWeatherMap.getDaily().size()));
-                    changeCurrentWeatherStatus(openWeatherMap);
+                    if (openWeatherMap != null) {
+                        weatherAdaptor.setDailies(openWeatherMap.getDaily());
+                        changeCurrentWeatherStatus(openWeatherMap);
+                    }else {
+                        weatherAdaptor.setDailies(new ArrayList<>());
+                        changeCurrentWeatherStatus(null);
+                    }
                 });
 
         weatherViewModel.getMessage()
@@ -206,28 +395,38 @@ public class Home extends Fragment {
 
 
     public void changeCurrentWeatherStatus(OpenWeatherMap openWeatherMap) {
-        Daily current = openWeatherMap.getCurrent();
-        currentTemp.setText(":\t".concat( current.getTemp().getMax()+""));
-        currentPresure.setText(":\t".concat(current.getPressure() + ""));
-        currentWindSpeed.setText(":\t".concat(current.getWindSpeed() + ""));
-        currentWindDirection.setText(":\t".concat(current.getWindDeg() + ""));
-        currentHumidity.setText(":\t".concat(current.getHumidity() + ""));
-        currentStateView.setText(current.getWeather().get(0).getDescription());
-        String iconCode = current.getWeather().get(0).getIcon();
-        Picasso.get().load("https://openweathermap.org/img/wn/" + iconCode + "@2x.png").
-                placeholder(R.drawable.ic_launcher_background).into(currentImage);
+        if (openWeatherMap!=null) {
+            Daily current = openWeatherMap.getCurrent();
+            currentTemp.setText(":\t".concat(current.getTemp().getMax() + ""));
+            currentPresure.setText(":\t".concat(current.getPressure() + ""));
+            currentWindSpeed.setText(":\t".concat(current.getWindSpeed() + ""));
+            currentWindDirection.setText(":\t".concat(current.getWindDeg() + ""));
+            currentHumidity.setText(":\t".concat(current.getHumidity() + ""));
+            currentStateView.setText(current.getWeather().get(0).getDescription());
+            String iconCode = current.getWeather().get(0).getIcon();
+            Picasso.get().load("https://openweathermap.org/img/wn/" + iconCode + "@2x.png").
+                    placeholder(R.drawable.ic_launcher_background).into(currentImage);
 
-
-        currentTime.setText(":\t".concat(convertTime(current.getDt())));
-
-        currentLocation.setText(":\t".concat(openWeatherMap.getLat() + "| " + openWeatherMap.getLon()));
+            currentTime.setText(":\t".concat(convertTime(current.getDt())));
+            currentLocation.setText(":\t".concat(openWeatherMap.getLat() + "| " + openWeatherMap.getLon()));
+        }else {
+            currentTemp.setText(getString(R.string.default_value));
+            currentPresure.setText(getString(R.string.default_value));
+            currentWindDirection.setText(getString(R.string.default_value));
+            currentWindSpeed.setText(getString(R.string.default_value));
+            currentHumidity.setText(getString(R.string.default_value));
+            currentStateView.setText(getString(R.string.default_value));
+            currentTime.setText(getString(R.string.default_value));
+            currentLocation.setText(getString(R.string.default_value));
+            currentImage.setImageResource(R.drawable.ic_launcher_background);
+        }
     }
 
 
     public String convertTime(long input) {
         long time = input * (long) 1000;
         Date date = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat(" MMM/dd HH:mm a");
+        SimpleDateFormat format = new SimpleDateFormat(" MMM/dd HH:mm:ss");
         return format.format(date);
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,8 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
@@ -22,68 +22,70 @@
             app:cardElevation="20dp">
 
             <LinearLayout
-
+                style="@style/Theme.FakeWeather"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <RadioGroup
-                    android:id="@+id/radio_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/radio_button"
                     android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/radio_pirates"
+                    <RadioButton android:id="@+id/radio_pirates"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30px"
-                        android:text="Search by city name" />
-
-                    <RadioButton
-                        android:id="@+id/radio_ninjas"
+                        android:text="Search by city name"
+                        />
+                    <RadioButton android:id="@+id/radio_ninjas"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_marginLeft="30px"
-                        android:checked="true"
-                        android:text="Search by location" />
+                        android:layout_height="wrap_content"
+                        android:text="Search by location"/>
                 </RadioGroup>
 
                 <EditText
                     android:id="@+id/city_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:visibility="gone"
                     android:hint="City Name"
-                    android:inputType="text"
-                    android:visibility="invisible" />
+                    android:inputType="text" />
 
                 <EditText
                     android:id="@+id/lat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:visibility="gone"
                     android:hint="LAT"
-                    android:inputType="numberDecimal"
-                    android:visibility="visible" />
+                    android:inputType="numberDecimal" />
 
                 <EditText
                     android:id="@+id/lon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:visibility="gone"
                     android:hint="LON"
-                    android:inputType="numberDecimal"
-                    android:visibility="visible" />
+                    android:inputType="numberDecimal" />
 
                 <Button
                     android:id="@+id/search_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10px"
-                    android:backgroundTint="@color/imageButtonColor"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:text="Search"
-                    android:visibility="visible"
-                    app:iconTint="@color/imageButtonText" />
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    />
 
 
             </LinearLayout>
@@ -330,10 +332,12 @@
                     android:id="@+id/recycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="7dp"
-                    tools:listitem="@layout/weather_design" />
+                    tools:listitem="@layout/weather_design"
+                    android:padding="16dp"
+                    android:clipToPadding="false"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+
     </LinearLayout>
-</FrameLayout>
+</androidx.core.widget.NestedScrollView>

@@ -11,9 +11,10 @@
         style="@style/Theme.FakeWeather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="7dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="20dp"
+        android:layout_margin="6dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="1dp"
+        app:contentPadding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,38 +22,40 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp">
+            android:layout_height="wrap_content">
 
 
             <ImageView
                 android:id="@+id/imageView_icon"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_marginStart="36dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_launcher_background" />
 
             <TextView
                 android:id="@+id/status_id"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:gravity="center"
                 android:text="TextView"
-                app:layout_constraintEnd_toEndOf="@+id/imageView_icon"
-                app:layout_constraintStart_toStartOf="@+id/imageView_icon"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView_icon" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="214dp"
-                android:layout_height="119dp"
-                android:layout_marginEnd="25dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView_icon"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
@@ -131,8 +134,7 @@
                 android:layout_height="wrap_content"
                 android:text="1"
                 android:textSize="20sp"
-                tools:layout_editor_absoluteX="383dp"
-                tools:layout_editor_absoluteY="91dp" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

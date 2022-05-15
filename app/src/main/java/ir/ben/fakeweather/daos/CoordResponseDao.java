@@ -14,7 +14,7 @@ public interface CoordResponseDao {
     @Query("SELECT * FROM coord_response WHERE cityName LIKE :cityName")
     List<CoordResponse> getByCityName(String cityName);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert()
     void insert(CoordResponse coordResponse);
 
     @Query("delete from coord_response where cityName like :cityName")

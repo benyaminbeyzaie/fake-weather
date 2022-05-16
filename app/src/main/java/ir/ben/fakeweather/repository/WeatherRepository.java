@@ -46,12 +46,14 @@ public class WeatherRepository {
                     if (response.isSuccessful()) {
                         if (response.body() == null || response.body().getCoord() == null) {
                             message.postValue("City not found!");
+                            openWeatherMap.postValue(null);
                             return;
                         }
                         Double lat = response.body().getCoord().getLat();
                         Double lon = response.body().getCoord().getLon();
                         if (lat == null || lon == null) {
                             message.postValue("City not found!");
+                            openWeatherMap.postValue(null);
                             return;
                         }
                         CoordResponse coordResponse = new CoordResponse();
@@ -66,6 +68,7 @@ public class WeatherRepository {
                         refresh(coordResponse.getLat(), coordResponse.getLon());
                     } else {
                         message.postValue("City not found!");
+                        openWeatherMap.postValue(null);
                     }
                 }
 
@@ -78,6 +81,7 @@ public class WeatherRepository {
                             refresh(cache.getLat(), cache.getLon());
                         } else {
                             message.postValue("City not found!");
+                            openWeatherMap.postValue(null);
                         }
                     });
                 }
@@ -149,8 +153,8 @@ public class WeatherRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             OpenWeatherMap result = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon);
             if (result == null) {
-                openWeatherMap.postValue(null);
                 message.postValue("Cache is null!");
+                openWeatherMap.postValue(null);
                 return;
             }
             if (System.currentTimeMillis() - result.savedAt > CACHE_TIME) {

@@ -149,7 +149,7 @@ public class Home extends Fragment {
     private void g(Context context) {
 
         new MaterialAlertDialogBuilder(context)
-                .setTitle("Title")
+                .setTitle("Warning")
                 .setMessage(R.string.confirm_massege)
                 .setPositiveButton("ok", (dialogInterface, i) -> {
                     stopTimer();

@@ -1,5 +1,6 @@
 package ir.ben.fakeweather.utils;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ public class WeatherAdaptor extends RecyclerView.Adapter<WeatherAdaptor.WeatherV
 
         Date date = calendar.getTime();
         String tod = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
+        Log.d("Timer2" , "today is: " + tod);
         today = map2.get(tod);
         return new WeatherViewHolder(view);
     }

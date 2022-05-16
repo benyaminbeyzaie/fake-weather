@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="imageButtonColor">#EF8DF6</color>
+    <color name="imageButtonText">#191E3A</color>
+    <color name="back">#191E3A</color>
+
+
+</resources>

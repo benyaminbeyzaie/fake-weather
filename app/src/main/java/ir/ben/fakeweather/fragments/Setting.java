@@ -26,6 +26,8 @@ public class Setting extends Fragment {
 
     SwitchMaterial themeSwitch;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,5 +67,6 @@ public class Setting extends Fragment {
             }
             editor.apply();
         });
+
     }
 }

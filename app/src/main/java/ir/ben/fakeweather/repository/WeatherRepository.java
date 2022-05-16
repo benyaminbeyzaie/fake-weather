@@ -74,7 +74,6 @@ public class WeatherRepository {
 
                 @Override
                 public void onFailure(Call<CoordResponse> call, Throwable t) {
-                    message.postValue("Loading city from cache");
                     AppDatabase.databaseWriteExecutor.execute(() -> {
                         if (db.coordResponseDao().getByCityName(cityName).size() > 0) {
                             CoordResponse cache = db.coordResponseDao().getByCityName(cityName).get(0);
@@ -98,7 +97,7 @@ public class WeatherRepository {
                     AppDatabase.databaseWriteExecutor.execute(() -> {
                         message.postValue("Loading");
                         if (response.body() == null || response.body().getCurrent() == null) {
-                            message.postValue("Error: response.body() is null or response.body().getCurrent() is null");
+                            message.postValue("Error");
                             return;
                         }
                         OpenWeatherMap lastCache = db.openWeatherMapDao().getOpenWeatherMapWithLatLong(lat, lon);
@@ -178,7 +177,6 @@ public class WeatherRepository {
             result.setDaily(dailies);
 
             openWeatherMap.postValue(result);
-            message.postValue("Loaded");
         });
     }
 

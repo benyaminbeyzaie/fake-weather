@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -50,7 +51,6 @@ import ir.ben.fakeweather.view_models.WeatherViewModel;
 
 
 public class Home extends Fragment {
-
 
     EditText cityName, latEdit, lonEdit;
     Button searchButton;
@@ -101,7 +101,7 @@ public class Home extends Fragment {
 
         radio = (RadioGroup) view.findViewById(R.id.radio_button);
 
-        cityName = view.findViewById(R.id.city_name);
+        cityName = view.findViewById(R.id.cityName);
         latEdit = view.findViewById(R.id.lat);
         lonEdit = view.findViewById(R.id.lon);
 
@@ -333,8 +333,8 @@ public class Home extends Fragment {
             case 0:
                 cityName.setVisibility(View.VISIBLE);
                 searchButton.setVisibility(View.VISIBLE);
-                latEdit.setVisibility(View.INVISIBLE);
-                lonEdit.setVisibility(View.INVISIBLE);
+                latEdit.setVisibility(View.GONE);
+                lonEdit.setVisibility(View.GONE);
                 isByCity = true;
                 stopTimer();
                 break;
@@ -343,7 +343,7 @@ public class Home extends Fragment {
                 latEdit.setVisibility(View.VISIBLE);
                 lonEdit.setVisibility(View.VISIBLE);
                 searchButton.setVisibility(View.VISIBLE);
-                cityName.setVisibility(View.INVISIBLE);
+                cityName.setVisibility(View.GONE);
                 isByCity = false;
                 stopTimer();
                 break;

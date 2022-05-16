@@ -4,22 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/back"
     tools:context=".fragments.Home">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
 
         <androidx.cardview.widget.CardView
+            style="@style/Theme.FakeWeather4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Theme.FakeWeather4"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="20dp">
+            android:layout_margin="8dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
 
             <LinearLayout
                 style="@style/Theme.FakeWeather"
@@ -28,66 +29,69 @@
                 android:orientation="vertical">
 
                 <RadioGroup
+                    android:id="@+id/radio_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/radio_button"
                     android:orientation="vertical">
 
-                    <RadioButton android:id="@+id/radio_pirates"
+                    <RadioButton
+                        android:id="@+id/radio_pirates"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30px"
-                        android:text="Search by city name"
-                        />
-                    <RadioButton android:id="@+id/radio_ninjas"
+                        android:text="Search by city name" />
+
+                    <RadioButton
+                        android:id="@+id/radio_ninjas"
                         android:layout_width="wrap_content"
-                        android:layout_marginLeft="30px"
                         android:layout_height="wrap_content"
-                        android:text="Search by location"/>
+                        android:layout_marginLeft="30px"
+                        android:text="Search by location" />
                 </RadioGroup>
 
+
                 <EditText
-                    android:id="@+id/city_name"
+                    android:id="@+id/cityName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
-                    android:visibility="gone"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:hint="City Name"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:imeOptions="actionDone"/>
+                    android:visibility="gone" />
+
 
                 <EditText
                     android:id="@+id/lat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
-                    android:visibility="gone"
-                    android:hint="LAT"
-                    android:inputType="numberDecimal" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:hint="Lat"
+                    android:inputType="numberDecimal"
+                    android:visibility="gone" />
 
                 <EditText
                     android:id="@+id/lon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
-                    android:visibility="gone"
-                    android:hint="LON"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+
+                    android:hint="Long"
+                    android:imeOptions="actionDone"
                     android:inputType="numberDecimal"
-                    android:imeOptions="actionDone"/>
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/search_button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="Search"
-                    android:visibility="gone"
                     android:layout_gravity="center"
-                    />
+                    android:layout_margin="10dp"
+                    android:text="Search"
+                    android:visibility="gone" />
 
 
             </LinearLayout>
@@ -99,9 +103,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="20dp">
+            android:layout_margin="8dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -132,6 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
+                        app:circularflow_radiusInDP="10dp"
                         android:backgroundTint="@color/imageButtonColor"
                         android:src="@drawable/ic_baseline_expand_more_24"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -146,10 +151,10 @@
                     style="@style/Theme.FakeWeather2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="7dp"
+                    android:layout_margin="8dp"
                     android:visibility="visible"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="20dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -312,9 +317,9 @@
             style="@style/Theme.FakeWeather4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="20dp">
+            android:layout_margin="8dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -333,8 +338,7 @@
                     android:id="@+id/recycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/weather_design"
-                    />
+                    tools:listitem="@layout/weather_design" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
